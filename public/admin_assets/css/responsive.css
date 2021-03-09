@@ -1,0 +1,415 @@
+@media (min-width: 768px) and (max-width: 1191px){
+	.login-page .input-box{
+			width: 70%;
+		}
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+
+}
+
+@media screen and (max-width: 767px) {
+	/*********nav***********/
+	.toggle-class .Navoverlay{
+		display: block;
+	}
+	.toggle-class  .close-menu{
+	  display: block;
+	}
+	.toggle-class .left-block .nav-logo img {
+	    max-width: 145px;
+	}
+	.toggle-class .logo {
+	    display: block;
+	}
+	.toggle-class .left-block{
+		width: 220px;
+		transform: translate(0);
+	}
+	.toggle-class .logo-icon{
+		display: none;
+	}
+	.toggle-class .navlink ul li a span {
+	    display: inline-block; 
+	}
+	.toggle-class .left-block .navlink ul li a i {
+	    font-size: 15px !important;
+	    width: 30px;
+	}
+	.toggle-class .left-block .navlink ul li a {
+	    padding: 8px 15px;
+	    font-size: 12px;
+	    text-align: left;
+	}
+	/*****end*****/
+	.left-block{
+		transform: translate(-100%);
+		transition: all 0.3s;
+	}
+	.right-block, .right-block .top-nav{
+		margin: 0;
+	}
+	.right-block .main-body {
+	    padding: 5px;
+	    padding-top: 155px;
+	}
+	.right-block .inner-body {
+	    padding: 10px;
+	    border-radius: 4px;
+	}
+	.right-block .main-body .dashboard-data .single-data .heading h3 {
+	    font-size: 12px;
+	    font-weight: 300;
+	    text-transform: capitalize;
+	}
+	.right-block .main-body .dashboard-data .single-data .txt img {
+	    width: 35px;
+	}
+	.right-block .main-body .dashboard-data .single-data .txt p {
+	    font-size: 18px;
+	}
+	.right-block .main-body .realtime-driver h2 {
+	    font-size: 18px;
+	}
+	.right-block .ride-notification .rides .profile {
+	    width: 45px;
+	    height: 45px;
+	    margin: 0px 0px;
+	}
+	.right-block .ride-notification .rides .details {
+	    margin-left: 55px;
+	}
+	.right-block .ride-notification .rides .details h4 {
+	    font-size: 13px;
+	    margin-bottom: 10px;
+	}
+	.right-block .ride-notification .rides .single-rides span.time {
+	    top: 16px;
+	    font-size: 9px;
+	}
+	.right-block .ride-notification .rn-warpper .view-all, .right-block .ride-notification .notification ul .view-all {
+	    font-size: 12px;
+	}
+	.right-block .ride-notification .notification li.single-noti img {
+	    width: 22px;
+	}
+	.right-block .ride-notification .notification li.single-noti h3 {
+	    margin-left: 35px;
+	    font-size: 12px;
+	    line-height: 16px;
+	}
+	.right-block .ride-notification .notification li.single-noti span.time {
+	    font-size: 10px;
+	}
+	.right-block .top-nav .right-item {
+	    float: right;
+	    display: flex;
+	    padding-right: 0; 
+	}
+	.right-block .top-nav{
+		padding: 15px;
+	}
+	.right-block .top-nav a.title {
+	    font-size: 16px;
+	}
+	.right-block .top-nav .title-btn {
+	    margin-top: 25px;
+	}
+	.right-block .driver-data-table h2 {
+	    font-size: 18px;
+	}
+	.right-block .driver-data-table .top-trip button {
+	    font-size: 13px;
+	    border-radius: 2px;
+	    padding: 4px 18px;
+	}
+	.right-block .driver-data-table .data-table .table-fbutton button{
+		font-size: 12px;
+		border-radius: 4px;
+		padding: 5px 14px;
+	}
+	.right-block .driver-data-table .data-table .table-fbutton .s-btn {
+	    margin-top: 12px;
+	}
+	div.dataTables_wrapper div.dataTables_filter input, div#dataTable_length select {
+	    height: 30px !important;
+	    font-size: 12px !important;
+	}
+	div#dataTable_length, div.dataTables_wrapper div.dataTables_filter {
+	    float: none !important;
+	    text-align: left !important;
+	}
+	.table-responsive {
+	    border: none;
+	}
+	.form-control {
+	    height: 35px;
+	    font-size: 13px;
+	}
+	.driver-details .driving-licence .licence .heading img {
+		width: 20px;
+	}
+	.driver-details .driving-licence .licence .heading h4 {
+	    font-size: 15px;
+	    margin-left: 8px;
+	}
+	.driver-details .driving-licence .licence .heading {
+	    border: 1px solid #e5e5e5;
+	    padding: 8px 10px;
+	    border-radius: 4px;
+	    margin-bottom: 15px;
+	}
+	.driver-details .driving-licence .licence .btns {
+	    margin-bottom: 20px;
+	}
+	.driver-details .tab-content {
+	    padding: 0;
+	}
+	.driver-details .tab-content .dashboard .profile-details{
+		margin-top: 20px;
+	}
+	.driver-perf-details .dr-details h2 {
+	    font-size: 16px;
+	    padding-bottom: 10px;
+	}
+	.driver-perf-details .dr-details table tr td {
+	    padding: 12px 0px;
+	    border-bottom: 1px solid #e4e4e4;
+	    font-size: 13px;
+	    color: #000;
+	    font-weight: 300;
+	}
+	.driver-perf-details .profile-details .img{
+		width: 60px;
+		height: 60px;
+		border: 1px solid #645ff8;
+		margin-bottom: 10px;
+	}
+	.driver-perf-details .profile-details .txt-details {
+	    margin-left: 70px;
+	    margin-top: 0;
+	}
+	.driver-details .tab-content .dashboard .profile-details .txt-details {
+	    margin-left: 0px;
+	    margin-top: 0;
+	    text-align: center;
+	}
+	.invoice .heading {
+	    padding: 15px;
+	    border-radius: 8px 8px 0 0;
+	}
+	.invoice .heading h2 {
+	    font-size: 14px;
+	}
+	.invoice .invoice-body .map-bill .invoice-table {
+	    margin-top: 20px;
+	}
+	.invoice .invoice-body .map-bill .invoice-table .heading2 h2 {
+	    font-size: 14px;
+	    padding: 10px;
+	}
+	.invoice .invoice-body .map-bill .invoice-table table tr td {
+	    font-size: 13px;
+	    font-weight: 300;
+	}
+	.invoice .invoice-body .map-bill .invoice-table table tfoot tr td {
+	    font-weight: 500;
+	    font-size: 14px;
+	}
+	.invoice .invoice-body .pickup-detination {
+	    padding: 10px;
+	    margin: 20px 0 0 0;
+	}
+	.invoice .invoice-body .pickup-detination .pd-route ul li .route-details label {
+	    font-size: 13px;
+	}
+	.invoice .invoice-body .pickup-detination .pd-route ul li .route-details p {
+	   	font-size: 12px;
+	    font-weight: 500;
+	}
+	.invoice .invoice-body .pickup-detination .pd-table table tr td {
+	    padding: 8px;
+	    font-size: 13px;
+	}
+	.invoice .invoice-body .ride-staus p {
+	    font-size: 14px;
+	}
+	.right-block .add-driver .buttons {
+	    padding: 10px 0;
+	}
+	.login-page .input-box {
+	    top: 18%;
+	    width: 90%;
+	}
+	.login-page .input-box .logo img {
+	    max-width: 130px;
+	}
+	.login-page .input-box h2 {
+	    font-size: 16px;
+	}
+	.login-page .input-box input.form-control {
+	    height: 35px;
+	    font-size: 13px;
+	}
+	.login-page .input-box .frgt-pass a {
+	    font-size: 13px;
+	}
+	.login-page .input-box .login-btn button {
+		border-radius: 30px;
+		width: 150px;
+		height: 35px;
+		font-size: 13px;
+		padding: 0px;
+	}
+	.profile-page .profile-details .header {
+	    padding: 12px;
+	    margin-bottom: 12px;
+	}
+	.profile-page .profile-details .header h2 {
+	    font-size: 14px;
+	}
+	.profile-page .profile-details .body .profile-picture {
+	    width: 120px;
+	    height: 120px;
+	    margin: 15px auto;
+	}
+	.profile-page .profile-details .body .profile-picture i{
+	    opacity: 1;
+	    display: block;
+	    transition: all 0.3s;
+	  }
+	  .profile-page .profile-details .body .profile-picture img{
+	    opacity: 0.50;
+	    transition: all 0.3s;
+	  }
+
+}
+
+@media (min-width: 568px) and (max-width: 767px){
+}
+
+@media screen and (max-width: 550px){
+	.right-block .main-body .chart .single-chart .img {
+	    float: none;
+	    width: 130px;
+	    height: 130px;
+	    margin: 0 auto;
+	}
+	.right-block .main-body .chart .single-chart .txt {
+	    margin-left: 0;
+	    margin-top: 20px;
+	}
+	.right-block .main-body .chart .single-chart .txt ul li {
+	    font-size: 13px;
+	}
+	.right-block .main-body .chart .single-chart .txt h3 {
+	    font-size: 16px;
+	    margin-bottom: 6px;
+	}
+	.right-block .main-body .chart .single-chart {
+	    margin-bottom: 20px;
+	    padding: 15px 15px;
+	}
+	.right-block .main-body .realtime-driver {
+	    padding: 10px 0px;
+	}
+	.right-block .ride-notification h2 {
+	    font-size: 16px;
+	    margin: 0px 0px 10px 0px;
+	}
+	.right-block .ride-notification .rn-warpper {
+	    margin-bottom: 30px;
+	    padding: 15px 15px;
+	}
+	.right-block .ride-notification .rides .details ul li i {
+	    font-size: 6px;
+	    width: 13px;
+	    height: 13px;
+	    line-height: 14px;
+	    margin: 4px 4px 0px 0px;
+	}
+	.right-block .ride-notification .rides .details ul li {
+	    list-style: none;
+	    padding: 0px 0px 8px 0px;
+	    color: #9d9d9d;
+	    display: flex;
+	    font-weight: 300;
+	    font-size: 12px;
+
+	}
+	div#dataTable_info, div#dataTable_paginate {
+	    font-size: 13px !important;
+		float: none !important;
+		margin: 10px 0 0 !important;
+	}
+	div#dataTable_paginate a#dataTable_previous, div#dataTable_paginate a#dataTable_next {
+		height: 30px !important;
+		width: 80px !important;
+		font-size: 12px !important;
+		line-height: 28px !important;
+	}
+	div#dataTable_paginate span a.paginate_button {
+	    height: 30px !important;
+	    line-height: 30px !important;
+	}
+	.right-block .driver-data-table .data-table table tbody td .img {
+	    width: 35px;
+	    height: 35px;
+	    overflow: hidden;
+	    border-radius: 50%;
+	}
+	.filter-modal .modal-footer button {
+	    height: 30px;
+	    font-size: 13px;
+	}
+	.right-block .add-driver .input-form .form-group .form-control {
+	    height: 35px;
+	    font-size: 12px;
+	}
+	.right-block .add-driver .input-form .form-group label {
+	    font-size: 13px;
+	}
+	.right-block .add-driver .input-form .form-group .upload-file button {
+	    width: 108px;
+	    font-size: 12px;
+	}
+	.driver-details .driver-tabs ul li {
+	    width: 100%;
+	    margin-bottom: 5px;
+	}
+	.driver-details .tab-content .dashboard .profile-details {
+	    padding: 0;
+	}
+	.driver-details .tab-content .dashboard .profile-details .img {
+		width: 70px;
+		height: 70px;
+		border: 1px solid #645ff8;
+		float: none;
+		margin: 0 auto;
+		margin-bottom: 10px;
+	}
+	
+	.driver-perf-details .profile-details .txt-details ul li {
+	    font-size: 14px;
+	}
+	.driver-perf-details .profile-details {
+	    padding: 0;
+	}
+	.driver-details .tab-content .dashboard .profile-details .txt-details ul li {
+	    list-style: none;
+	    font-size: 13px;
+	}
+	.driver-details .driving-licence .licence .btns button {
+	    margin-right: 2px;
+	    height: 32px;
+	    margin-bottom: 5px;
+	    font-size: 12px;
+	    padding: 4px 12px;
+	}
+	.add-promocode button {
+	    height: 35px;
+	    font-size: 12px;
+	    padding: 0 14px;
+	}
+
+}
