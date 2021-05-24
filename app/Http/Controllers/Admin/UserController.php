@@ -23,6 +23,7 @@ class UserController extends Controller{
             $users =DB::table('users as u')
                         ->select('u.*')
                         ->where('u.role', '=', "2")
+                        ->whereNull('deleted_at')
                         ->get();
             $number_key=1;
             foreach ($users as $key => $value) {
@@ -131,5 +132,40 @@ class UserController extends Controller{
             }
             return datatables()->of($orders)->make(true);
         }
+    }
+
+    public function update(Request $request,$id){
+
+        $rules = [
+            'name'    => 'required',
+            'email'   => 'required|unique:users,email,'.$id.',id,deleted_at,NULL',
+            'phone'   => 'required|unique:users,phone_number,'.$id.',id,deleted_at,NULL',
+         ];
+ 
+           // Validate 
+          $validator = \Validator::make($request->all(), $rules);
+          if($validator->fails()){
+             return array('status' => 'error' , 'msg' => 'failed to add ad', '' , 'errors' => $validator->errors());
+          }
+          $fullnameArr = explode(' ',$request->name);
+          $user = User::find($id);
+          $user->user_name    = $request->name;
+          $user->first_name   = $fullnameArr[0] ?? NULL;
+          $user->last_name    = $fullnameArr[1] ?? NULL;
+          $user->email        = $request->email;
+          $user->phone_number = $request->phone;
+
+          if($user->update())
+                return ['status'=>'success','message'=>'Successfully updated'];
+          else
+                return ['status'=>'failed','message'=>'Failed to update'];
+    }
+
+    public function destroy($id){
+          $user = User::find($id);
+          if($user->delete())
+              return redirect()->route('admin/user/index')->with('status',true)->with('message','Successfully deleted');
+          else
+              return redirect()->route('admin/user/index')->with('status',false)->with('message','Failed to delete');
     }
 }

@@ -107,39 +107,30 @@ class VendorContoller extends Controller{
         return view('admin.vendor.edit',compact('data'));    
     }
     public function update(Request $request,$id){
-        $inputs      = $request->all();
-        $rules = [
-            'zone_name'     => 'required',
-            'user_name'     => 'required',
-            'email'         => ['required', Rule::unique('users', 'email')->where('role', '3')->ignore($id, 'id')],
-            'phone_number'  => ['required', Rule::unique('users', 'phone_number')->where('role', '3')->ignore($id, 'id')],
-            //'password'          => 'min:8|required_with:confirm_password|same:confirm_password',
-            //'confirm_password'  => 'required|min:8',
-        ];
-       
-        $this->validate($request,$rules);
+      
+         $rules = [
+            'name'    => 'required',
+            'email'   => 'required|unique:users,email,'.$id.',id,deleted_at,NULL',
+            'phone'   => 'required|unique:users,phone_number,'.$id.',id,deleted_at,NULL',
+         ];
+ 
+           // Validate 
+          $validator = \Validator::make($request->all(), $rules);
+          if($validator->fails()){
+             return array('status' => 'error' , 'msg' => 'failed to add ad', '' , 'errors' => $validator->errors());
+          }
+          $fullnameArr = explode(' ',$request->name);
+          $user = User::find($id);
+          $user->user_name    = $request->name;
+          $user->first_name   = $fullnameArr[0] ?? NULL;
+          $user->last_name    = $fullnameArr[1] ?? NULL;
+          $user->email        = $request->email;
+          $user->phone_number = $request->phone;
 
-        $profile_image=null;
-        if($request->hasFile('profile_image')) {
-            $profile_image = str_random('10').'_'.time().'.'.request()->profile_image->getClientOriginalExtension();
-            request()->profile_image->move(public_path('uploads/profiles/'), $profile_image);
-        }
-        
-        $User                     = User::find($id);
-        //$User->role               = '3';
-        $User->zone_id            = $inputs['zone_name'];
-        $User->user_name          = $inputs['user_name'];
-        $User->email              = $inputs['email'];
-        $User->phone_number       = $inputs['phone_number'];
-        //$User->password           = Hash::make($inputs['password']);
-        if($profile_image){
-            $User->profile_image  = $profile_image;
-        }
-        if($User->save()){
-            return back()->with('success','Delivery boy updated successfully');
-        }else{
-            return back()->with('error','Delivery updated failed,please try again');
-        }
+          if($user->update())
+                return ['status'=>'success','message'=>'Successfully updated'];
+          else
+                return ['status'=>'failed','message'=>'Failed to update'];
     }
 
     public function activeStatusChange(Request $request){
@@ -227,4 +218,12 @@ class VendorContoller extends Controller{
             return datatables()->of($orders)->make(true);
         }
     }
+
+     public function destroy($id){
+        $user = User::find($id);
+        if($user->delete())
+            return redirect()->route('admin/vendor/index')->with('status',true)->with('message','Successfully deleted');
+        else
+            return redirect()->route('admin/vendor/index')->with('status',false)->with('message','Failed to delete');
+     }
 }

@@ -22,7 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
 	 	Route::delete('admin/user/delete/{id?}' , 'Admin\UserController@destroy')->name('destroy');
 	 	Route::put('admin/user/active_status_change' , 'Admin\UserController@activeStatusChange')->name('active_status_change');
 	 	Route::get('admin/user/trip_history' , 'Admin\UserController@tripHistory')->name('trip_history');
-	 	
 	});
 
 
@@ -60,7 +59,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('admin/order/show/{id?}' , 'Admin\OrderController@show')->name('show');
 		Route::get('admin/order/edit/{id?}' , 'Admin\OrderController@edit')->name('edit');
 	 	Route::put('admin/order/update/{id?}' , 'Admin\OrderController@update')->name('update');
-	 	Route::delete('admin/order/delete/{id?}' , 'Admin\OrderController@destroy')->name('destroy');
+	 	Route::delete('admin/order/destroy/{id}' , 'Admin\OrderController@destroy')->name('destroy');
 	});
 });
 ?>

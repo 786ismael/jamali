@@ -78,4 +78,12 @@ class OrderController extends Controller
            return ['status' => 'failed' , 'message' => 'Status updated failed'];   
         }
     }
+
+    public function destroy($id){
+        $order = Appointment::find($id);
+        if($order->delete())
+            return redirect()->route('admin/order/index')->with('status',true)->with('message','Successfully deleted');
+        else
+            return redirect()->route('admin/order/index')->with('status',false)->with('message','Failed to delete');
+     }
 }

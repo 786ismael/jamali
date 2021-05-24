@@ -40,9 +40,35 @@ namespace App\Helpers;
 			    		<div class="col-md-6">
 			    			<div id="map" style="height: 400px; width: 400px;"></div>
 			    		</div>
+						<div class="col-md-12">
+                              <button type="button" class="same-btn1 btn-delete">Delete</button>
+						</div>
 			    	</div>
 					
 			    </div>
+				<div class="modal" tabindex="-1" id="deleteModal" role="dialog">
+				    <form class="form" action="{{route('admin/order/destroy',$data['appointment']->appointment_id)}}" method="POST">
+					   @csrf
+					   @method('DELETE')
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Delete</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Are you sure want to delete?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn same-btn1">Confirm</button>
+								<button type="button" class="btn same-btn1" data-dismiss="modal">Cancel</button>
+							</div>
+							</div>
+						</div>
+					</form>
+				</div>
 			   {{-- @if($data['order']->order_id)
 				   <div id="" class="">
 						<div class="driver-data-table">
@@ -81,3 +107,12 @@ namespace App\Helpers;
 	</div>
 </div>
 @endsection
+@push('js')
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <script>
+		$('body').on('click','.btn-delete',function(e){
+			e.preventDefault();
+			$('#deleteModal').modal('show');
+		});
+  </script>
+@endpush

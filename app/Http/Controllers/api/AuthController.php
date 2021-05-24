@@ -498,8 +498,6 @@ class AuthController extends Controller{
               $user->otp                = $otp;
               $user->otp_verify_status  = '0';
               $user->update();
-
-              //https://apps.gateway.sa/vendorsms/pushsms.aspx?user=almotelq&password=Asim6363981&msisdn=00966533755044&sid=THEPLANET&msg=This message send from Jamali app&fl=0
               $message = __('Your jamali forgot otp is ') . $otp;
               $this->sendMessage($inputs['phone_number'],$message);
               return response(['status' => true , 'message' => __('Otp sent'),'data'=>$user]);
@@ -509,16 +507,36 @@ class AuthController extends Controller{
     }
 
     public function sendMessage($mobileNumber,$message){
-        try{
-		$url = "https://apps.gateway.sa/vendorsms/pushsms.aspx?user=almotelq&password=Asim6363981&msisdn=$mobileNumber&sid=THEPLANET&msg=$message&fl=0";
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL,$url);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_exec($ch);
-		curl_close($ch);
-        }catch(\Exception $e){
-          
-        }
+            $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
+            $dataArray = [
+               "user" => "almotelq",
+               "password" => "q1w2e3r4",
+               "msisdn" => $mobileNumber,
+               "sid" => "JAMALI",
+               "msg" => $message,
+               "fl"  => "0"
+            ];
+            $curl   = curl_init();
+            $data   = http_build_query($dataArray);
+            $getUrl = $url."?".$data;
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $getUrl,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            // if ($err) {
+            //   echo "cURL Error #:" . $err;
+            // } else {
+            //   echo $response;
+            // }
     }
 
     public function forgotPasswordBackUp(Request $request){
