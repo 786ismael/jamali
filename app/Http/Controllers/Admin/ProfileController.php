@@ -105,7 +105,7 @@ class ProfileController extends Controller
         $user->user_name    = $input['first_name'] .' '.$input['last_name'];
         $user->first_name   = $input['first_name'];
         $user->last_name    = $input['last_name'];
-        //$user->email        = $input['email'];
+        $user->email        = $input['email'];
         $user->phone_number       = $input['phone_number'];
 
         if($user->update()){

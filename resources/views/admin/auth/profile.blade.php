@@ -42,7 +42,7 @@
 									</div>
 									<div class="form-group">
 										<label>Email:</label>
-										<input type="email" class="form-control" placeholder="Email" name="email" value="{{$data['user']->email}}"  readonly="">
+										<input type="email" class="form-control" placeholder="Email" name="email" value="{{$data['user']->email}}" >
 									</div>
 									<div class="form-group">
 										<label>Phone Number:</label>

@@ -2,13 +2,12 @@
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
+	Route::get('/', 'Admin\HomeController@index')->name('dashboard');
 	Route::get('/admin/dashboard', 'Admin\HomeController@index')->name('dashboard');
 	Route::get('/admin/profile' , 'Admin\ProfileController@show')->name('profile');
 	Route::put('/admin/update' , 'Admin\ProfileController@update')->name('admin_profile_update');
-	Route::put('/admin/update' , 'Admin\ProfileController@update')->name('admin_profile_update');
 	Route::put('/admin/update_password' , 'Admin\ProfileController@updatePassword')->name('admin_update_password');
 	Route::put('/admin/update_profile_image' , 'Admin\ProfileController@updateProfileImage')->name('update_profile_image');
-
 
 	Route::name('admin/user/')->group(function(){
 		Route::get('admin/user' , 'Admin\UserController@index')->name('index');
@@ -23,8 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
 	 	Route::put('admin/user/active_status_change' , 'Admin\UserController@activeStatusChange')->name('active_status_change');
 	 	Route::get('admin/user/trip_history' , 'Admin\UserController@tripHistory')->name('trip_history');
 	});
-
-
 
 	Route::name('admin/vendor/')->group(function(){
 		Route::get('admin/vendor' , 'Admin\VendorContoller@index')->name('index');
@@ -61,5 +58,8 @@ Route::group(['middleware' => ['auth']], function () {
 	 	Route::put('admin/order/update/{id?}' , 'Admin\OrderController@update')->name('update');
 	 	Route::delete('admin/order/destroy/{id}' , 'Admin\OrderController@destroy')->name('destroy');
 	});
+
+	Route::get('admin/landing/page' , 'Admin\HomeController@landingPage')->name('landing.index');
+
 });
 ?>

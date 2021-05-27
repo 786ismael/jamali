@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Appointment;
 
+use Session;
 use App\Helpers\ImageHelper;
 use Illuminate\Validation\Rule;
 use Validator;
@@ -56,6 +57,21 @@ class OrderController extends Controller
             $data['appointment']->profile_image = ImageHelper::getProfileImage($data['appointment']->profile_image);
         }
         return view('admin.order.show',compact('data'));
+    }
+
+    public function update(Request $request,$id){
+        $rules = [
+            'booking_date' => 'required',
+            'booking_time' => 'required'
+        ];
+        $request->validate($rules);
+        $Appointment = Appointment::find($id);
+        $Appointment->appointment_date = date('Y-m-d',strtotime($request->booking_date));
+        $Appointment->appointment_time = date('H:i:s',strtotime($request->booking_time));
+        if($Appointment->update())
+            return back()->with('status',true)->with('message','Updated successfully');
+        else
+            return back()->with('status',false)->with('message','Failed to update');
     }
 
     public function orderStatusChange(Request $request){

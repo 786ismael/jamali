@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use Auth;
+
 class HomeController extends Controller{
     public function index(){
         $data['user_count']             = User::where('role','2')->count();
@@ -29,5 +31,11 @@ class HomeController extends Controller{
 
     public function termCondition(){
         return view('term_condition');
-    } 
+    }
+
+    public function landingPage(Request $request){
+       $id = auth::id();
+       $id = base64_encode(base64_encode($id));
+       return redirect( env('APP_URL') . '/almotelq/jamali/'.$id);
+    }
 }
