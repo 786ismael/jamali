@@ -13,9 +13,17 @@ return [
     'portfolio_image'           => 'Please send portfolio image',
     'vendor_portfolio_id'       => 'Please send vendor portfolio id',
     'appointment_id'            => 'Please send appointment id',
-    'status'            => 'Please send status',
-    'service_for'            => 'Please send service for',
+    'status'                    => 'Please send status',
+    'service_for'               => 'Please send service for',
     
+    'offer_name_en'             => 'Please send Offer name',
+    'service_id'                => 'Please send service Id',
+    'offer_type'                => 'Please send Offer type',
+    'price'                     => 'Please send Offer price',
+    'description_en'            => 'Please send description',
+    
+    'offer_id'                  => 'Please send offer id',
+
 
 
     'record_found'                  => 'Record found',
@@ -43,5 +51,7 @@ return [
     'appointment_accpted'           => 'Appointment accpted successfully',
     'appointment_decline'           => 'Appointment decline successfully',
     'appointment_status_error'      => 'Appointment accpted or decline failed,please try again',
+
+    
     
 ];
