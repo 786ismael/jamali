@@ -91,6 +91,11 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::get('/vendor/get_product_details', 'api\VendorController@getProductDetails');
 	Route::post('/vendor/update_product', 'api\VendorController@updateProduct');
 	Route::post('/vendor/delete_product', 'api\VendorController@deleteProduct');
+
+
+	Route::post('/vendor/add_offers','api\VendorController@vendorOfferAdd');
+	Route::get('/vendor/get_offers','api\VendorController@getVendorOfferList');
+	Route::delete('/vendor/delete_offer','api\VendorController@deleteVendorOfferList');
 	
 });
 

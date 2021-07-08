@@ -23,8 +23,8 @@ use Hash;
 use Redirect,Response,DB,Config;
 use Datatables;
 
-class VendorController extends Controller{
-
+class VendorController extends Controller
+{
     /**
      * Create a new VendorController instance.
      *
@@ -963,4 +963,116 @@ class VendorController extends Controller{
             return response(['status' => false , 'message' => __('Failed to delete product') ]);
         }
     }
+
+    public function vendorOfferAdd (Request $request)
+    {
+        $langData   = trans('api_vendor');
+        $inputs = $request->all();
+        $rules = [
+            'user_id'                   => 'required',
+            'offer_name_en'             =>  'required',
+            'offer_name_ar'             =>  'required',
+            'service_id'                =>  'required',
+            'offer_type'                =>  'required',
+            'price'                     =>  'required',
+            'description_en'            =>  'required',
+            'description_ar'            =>  'required',
+        ];
+        $message = [
+            'user_id.required'          => $langData['user_id'],
+            'offer_name_en.required'    => $langData['offer_name_en'],
+            'service_id.required'       => $langData['service_id'],
+            'offer_type.required'       => $langData['offer_type'],
+            'price.required'            => $langData['price'],
+            'description_en.required'   => $langData['description_en'],
+        ];
+        $validator = Validator::make($inputs, $rules , $message);
+        if ($validator->fails()) {
+            $errors =  $validator->errors()->all();
+            return response(['status' => false , 'message' => $errors[0]] , 200);              
+        }
+        $offerArr = array(
+            'user_id'           =>  $request->user_id,
+            'offer_name_en'     =>  $request->offer_name_en,
+            'offer_name_ar'     =>  $request->offer_name_ar,
+            'service_id'        =>  $request->service_id,
+            'offer_type'        =>  $request->offer_type,
+            'price'             =>  $request->price,
+            'description_en'    =>  $request->description_en,
+            'description_ar'    =>  $request->description_ar,
+            'created_at'        =>  date('Y-m-d H:i:s'),
+            'updated_at'        =>  date('Y-m-d H:i:s'),
+        );
+        $getOfferId = \DB::table('offers')->insertGetId($offerArr);
+        if($getOfferId) {
+            return (['status' => true, 'message' => __('Offer added successfully'), 'returnId' => $getOfferId]);
+        }else{
+            return (['status' => false, 'message' => __('Failed to add Offer')]);
+        }
+    }
+
+    public function getVendorOfferList (Request $request)
+    {
+        $langData   = trans('api_vendor');
+        $rules = [
+            'user_id'                   => 'required',
+        ];
+        $message = [
+            'user_id.required'          => $langData['user_id'],
+        ];
+        $validator = Validator::make($request->all(), $rules , $message);
+        if ($validator->fails()) {
+            $errors =  $validator->errors()->all();
+            return response(['status' => false , 'message' => $errors[0]] , 200);              
+        }
+        $getList = \DB::table('offers')->where('user_id',$request->user_id)->get();
+        if(count($getList) > 0)  {
+            return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
+        }else{
+            return (['status' => false, 'message' => __('No Record Found'), 'data' => [] ]);
+        }
+    }
+
+    public function deleteVendorOfferList (Request $request)
+    {
+        $langData   = trans('api_vendor');
+        $rules = [
+            'offer_id'      =>  'required',
+            'user_id'       =>  'required',
+        ];
+        $message = [
+            'offer_id.required'  =>     $langData['offer_id'],
+            'user_id.required'   =>     $langData['user_id'],
+        ];
+        $validator = Validator::make($request->all(), $rules , $message);
+        if ($validator->fails()) {
+            $errors =  $validator->errors()->all();
+            return response(['status' => false , 'message' => $errors[0]] , 200);              
+        }
+        $selectOffer = \DB::table('offers')->where('id',$request->offer_id)
+                        ->where('user_id',$request->user_id)                        
+                        ->delete();
+        if($selectOffer) {
+            return (['status' => true, 'message' => __('Offer deleted successfully')]);
+        }else{
+            return (['status' => false, 'message' => __('Failed to delete Offer, Try again')]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
