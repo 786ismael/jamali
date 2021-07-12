@@ -244,11 +244,19 @@ class UserController extends Controller{
              }   
         }
 
-        $offerData = DB::table('offers')
+        $offerData = DB::table('offers as o','v.service_name','v.service_name_ar','v.service_image')
+                            ->leftJoin('vendor_services as v','v.vendor_service_id','=','o.service_id')
                             ->orderBy('id','desc')
                             ->limit('10')
                             ->get();
-
+        if($offerData->toArray()){
+             foreach($offerData as $key => $value){
+                 // if(app::getLocale() == 'ar')
+                 // $VendorServices[$key]->service_name = (!empty($value->service_name_ar) && !is_null($value->service_name_ar) ) ? $value->service_name_ar  :  $value->service_name;
+                 $offerData[$key]->service_image = $this->getServiceImage($value->service_image);
+             //     $VendorServices[$key]->vendor_profile_image = $this->getProfileImage($value->vendor_profile_image);
+            }   
+        }                          
         return response(['status' => true , 'message' => __('Record not found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices,'offer_data'=>$offerData]);
     }
 
