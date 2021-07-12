@@ -1025,7 +1025,11 @@ class VendorController extends Controller
             $errors =  $validator->errors()->all();
             return response(['status' => false , 'message' => $errors[0]] , 200);              
         }
-        $getList = \DB::table('offers')->where('user_id',$request->user_id)->get();
+        $getList = \DB::table('offers')->select('offers.*','vendor_services.service_name','vendor_services.service_name_ar')->where('user_id',$request->user_id)
+                    ->leftJoin('vendor_services', function($join) {
+                      $join->on('offers.service_id', '=', 'vendor_services.vendor_service_id');
+                    })->get();
+
         if(count($getList) > 0)  {
             return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
         }else{
