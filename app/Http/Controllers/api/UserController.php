@@ -1006,7 +1006,7 @@ class UserController extends Controller{
             $errors =  $validator->errors()->all();
             return response(['status' => false , 'message' => $errors[0]] , 200);              
         }        
-        $VendorService = VendorService::select('vendor_services.*','c.category_name','c.category_name_ar','v.user_name as vendor_name','v.profile_image as vendor_profile','v.specialist as vendor_description','v.address','o.price as offer_amount')
+        $VendorService = VendorService::select('vendor_services.*','c.category_name','c.category_name_ar','v.user_name as vendor_name','v.profile_image as vendor_profile','v.specialist as vendor_description','v.address','o.price as offer_amount','o.offer_type')
                                 ->leftJoin('categories as c','c.category_id','=','vendor_services.category_id')
                                 ->leftJoin('users as v','v.id','=','vendor_services.vendor_id')
                                 ->leftJoin('offers as o','o.service_id','=','vendor_services.vendor_service_id')
