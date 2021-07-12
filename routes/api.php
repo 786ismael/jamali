@@ -95,7 +95,7 @@ Route::group(['middleware' => ['localization']], function () {
 
 	Route::post('/vendor/add_offers','api\VendorController@vendorOfferAdd');
 	Route::get('/vendor/get_offers','api\VendorController@getVendorOfferList');
-	Route::delete('/vendor/delete_offer','api\VendorController@deleteVendorOfferList');
+	Route::get('/vendor/delete_offer','api\VendorController@deleteVendorOfferList');
 	
 });
 
