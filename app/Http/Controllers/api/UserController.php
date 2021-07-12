@@ -244,7 +244,12 @@ class UserController extends Controller{
              }   
         }
 
-        return response(['status' => true , 'message' => __('Record not found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices]);
+        $offerData = DB::table('offers')
+                            ->orderBy('id','desc')
+                            ->limit('10')
+                            ->get();
+
+        return response(['status' => true , 'message' => __('Record not found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices,'offer_data'=>$offerData]);
     }
 
     public function getCategory(Request $request){
@@ -377,8 +382,9 @@ class UserController extends Controller{
             $VendorPortfolios = [];
             $vendorRatings= [];
             $VendorServices = DB::table('vendor_services as vs')
-                            ->select('vs.*','c.category_name','c.category_name_ar')
+                            ->select('vs.*','c.category_name','c.category_name_ar','o.price as offer_amount')
                             ->leftJoin('categories as c','c.category_id','=','vs.category_id')
+                            ->leftJoin('offers as o','o.service_id','=','vs.vendor_service_id')
                             ->whereNull('vs.deleted_at')
                             ->where('vs.vendor_id',$Vendor->vendor_id)
                             ->orderBy('vs.vendor_service_id','desc')
@@ -991,11 +997,11 @@ class UserController extends Controller{
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
             return response(['status' => false , 'message' => $errors[0]] , 200);              
-        }
-
-        $VendorService = VendorService::select('vendor_services.*','c.category_name','c.category_name_ar','v.user_name as vendor_name','v.profile_image as vendor_profile','v.specialist as vendor_description','v.address')
+        }        
+        $VendorService = VendorService::select('vendor_services.*','c.category_name','c.category_name_ar','v.user_name as vendor_name','v.profile_image as vendor_profile','v.specialist as vendor_description','v.address','o.price as offer_amount')
                                 ->leftJoin('categories as c','c.category_id','=','vendor_services.category_id')
                                 ->leftJoin('users as v','v.id','=','vendor_services.vendor_id')
+                                ->leftJoin('offers as o','o.service_id','=','vendor_services.vendor_service_id')
                                 ->where('vendor_services.vendor_service_id',$inputs['service_id'])
                                 ->whereNull('vendor_services.deleted_at')
                                 ->first();
@@ -1175,6 +1181,32 @@ class UserController extends Controller{
         }
         return ['status'=>false,'message'=>__('Record not found')];
 
+    }
+
+    public function getAllVendorOfferList (Request $request)
+    {        
+        $langData   = trans('api_vendor');
+        // $rules = [
+        //     'user_id'                   => 'required',
+        // ];
+        // $message = [
+        //     'user_id.required'          => $langData['user_id'],
+        // ];
+        // $validator = Validator::make($request->all(), $rules , $message);
+        // if ($validator->fails()) {
+        //     $errors =  $validator->errors()->all();
+        //     return response(['status' => false , 'message' => $errors[0]] , 200);              
+        // }
+        $getList = \DB::table('offers')->select('offers.*','vendor_services.service_name','vendor_services.service_name_ar')
+                    ->leftJoin('vendor_services', function($join) {
+                      $join->on('offers.service_id', '=', 'vendor_services.vendor_service_id');
+                    })->orderBy('id','desc')->get();
+
+        if(count($getList) > 0)  {
+            return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
+        }else{
+            return (['status' => false, 'message' => __('No Record Found'), 'data' => [] ]);
+        }
     }
 
 }
