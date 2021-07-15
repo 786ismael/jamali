@@ -472,7 +472,6 @@ class AuthController extends Controller{
     }
 
         public function forgotPassword(Request $request){
-
         $langData   = trans('api_auth');
         $inputs     = $request->all();
         $rules = [
@@ -509,7 +508,39 @@ class AuthController extends Controller{
     }
 
     public function sendMessage($mobileNumber,$message){
-        try{
+$url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
+            $dataArray = [
+               "user" => "almotelq",
+               "password" => "q1w2e3r4",
+               "msisdn" => $mobileNumber,
+               "sid" => "JAMALI",
+               "msg" => $message,
+               "fl"  => "0"
+            ];
+            $curl   = curl_init();
+            $data   = http_build_query($dataArray);
+            $getUrl = $url."?".$data;
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $getUrl,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            if ($err) {
+              // echo "cURL Error #:" . $err;
+                error_log("cURL Error #:" . print_r($err,TRUE));
+            } else {
+              //echo $response;
+              error_log("cURL success #:" . print_r($response,TRUE));
+            }
+        /*try{
 		$url = "https://apps.gateway.sa/vendorsms/pushsms.aspx?user=almotelq&password=Asim6363981&msisdn=$mobileNumber&sid=THEPLANET&msg=$message&fl=0";
 		$ch = curl_init();
 		curl_setopt($ch,CURLOPT_URL,$url);
@@ -518,7 +549,7 @@ class AuthController extends Controller{
 		curl_close($ch);
         }catch(\Exception $e){
           
-        }
+        }*/
     }
 
     public function forgotPasswordBackUp(Request $request){

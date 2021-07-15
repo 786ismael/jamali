@@ -472,7 +472,6 @@ class AuthController extends Controller{
     }
 
         public function forgotPassword(Request $request){
-
         $langData   = trans('api_auth');
         $inputs     = $request->all();
         $rules = [
@@ -500,14 +499,14 @@ class AuthController extends Controller{
               $user->update();
               $message = __('Your jamali forgot otp is ') . $otp;
               $this->sendMessage($inputs['phone_number'],$message);
-              return response(['status' => true , 'message' => __('Otp sent'),'data'=>$user]);
+//              return response(['status' => true , 'message' => __('Otp sent'),'data'=>$user]);
           }else{
                return response(['status' => false , 'message' => __('Failed to send otp')]);
           }   
     }
 
     public function sendMessage($mobileNumber,$message){
-            $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
+          $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             $dataArray = [
                "user" => "almotelq",
                "password" => "q1w2e3r4",
@@ -532,6 +531,16 @@ class AuthController extends Controller{
             $response = curl_exec($curl);
             $err = curl_error($curl);
             curl_close($curl);
+		if ($err) {
+              // echo "cURL Error #:" . $err;
+//                error_log("cURL Error #:" . print_r($err,TRUE));
+			    Log::info($err);
+
+            } else {
+              //echo $response;
+		    Log::info($response);
+  //            error_log("cURL Error #:" . print_r($response,TRUE));
+            }
             // if ($err) {
             //   echo "cURL Error #:" . $err;
             // } else {
