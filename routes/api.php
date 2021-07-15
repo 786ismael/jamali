@@ -106,6 +106,12 @@ Route::get('/privacy-policy', 'api\AuthController@privacyPolicy');
 Route::get('/user/add/favourite', 'api\UserController@addFavourite');
 Route::get('/user/remove/favourite', 'api\UserController@removeFavourite');
 Route::get('/user/favourite/list', 'api\UserController@favouriteList');
-Route::get('country-list', 'api\AuthController@countryList');
-Route::get('city-list', 'api\AuthController@cityList');
+//Route::get('/country_list', 'api\AuthController@countryList');
+//Route::get('/city-list', 'api\AuthController@cityList');
+
+Route::get('/country_list', 'api\UserController@countryList');
+Route::get('/city-list', 'api\UserController@cityList');
+
+
+
 
