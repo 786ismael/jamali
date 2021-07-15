@@ -1117,4 +1117,33 @@ class AuthController extends Controller{
                     return view('api.privacy_policy_english');
             }
     }
+
+    public function countryList(Request $request){
+        $country = ApiHelper::country();
+        if(!empty($country->toArray())){
+            return response(['status' => true , 'message' => __('Record found'), 'data'=>$country ]);
+        }else{
+            return response(['status' => false , 'message' => __('Rrecord not found') ]);
+        }
+    }
+
+    public function cityList(Request $request)
+    {
+        $langData   = trans('api_auth');
+        $inputs = $request->all();
+        $rules = [
+            'country_id' => 'required'
+        ];
+         $message = [
+            'country_id.required'           => __('Country id field is required')
+        ];
+
+        $validator = Validator::make($inputs, $rules , $message);
+        $cities = ApiHelper::city($request->country_id);
+        if(!empty($cities->toArray())){
+            return response(['status' => true , 'message' => __('Record found'), 'data'=>$cities ]);
+        }else{
+            return response(['status' => false , 'message' => __('Rrecord not found') ]);
+        }
+    }
 }

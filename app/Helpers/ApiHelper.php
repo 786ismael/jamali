@@ -6,6 +6,8 @@ use Session;
 use App;
 use Carbon\Carbon;
 use url;
+use App\Models\Country;
+use App\Models\City;
 
 class ApiHelper {
     public static function otpGenrator($number){ 
@@ -333,7 +335,16 @@ class ApiHelper {
             
         }
     }
+
+    public static function country()
+    {
+        $country = Country::where('status',1)->get();
+        return $country;
+    }
+
+    public static function city($country_id)
+    {
+        $country = City::where('country_id',$country_id)->get();
+        return $country;
+    }
 }
-
-
-    
