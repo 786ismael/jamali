@@ -86,7 +86,7 @@ class AuthController extends Controller{
         $User->user_name          = $inputs['user_name'];
         $User->email              = $inputs['email'] ?? NULL;
         $User->phone_number       = $inputs['phone_number'];
-        $User->password           = Hash::make($inputs['password']);
+        $User->password           = Hash::make($inputs['password']);        
         //$User->device_type        = $inputs['device_type'];
         //$User->device_token       = $inputs['device_token'];
         if(!empty($inputs['vendor_type'])){
@@ -126,6 +126,13 @@ class AuthController extends Controller{
         }
         if(!empty($inputs['gender'])){
             $User->gender       = $inputs['gender'];
+        }
+
+        if(!empty($inputs['country_id'])){
+            $User->country_id    = $inputs['country_id'] ?? '';
+        }
+        if(!empty($inputs['city_id'])){
+            $User->city_id    = $inputs['city_id'] ?? '';
         }
         
         $User->save();
@@ -794,6 +801,12 @@ class AuthController extends Controller{
             }
             if(!empty($inputs['description_arabic'])){
                 $User->description_ar    = $inputs['description_arabic'] ?? '';
+            }
+            if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
             }
             if($User->update()){
                 $User = User::find($User->id);

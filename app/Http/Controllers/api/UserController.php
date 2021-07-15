@@ -335,6 +335,14 @@ class UserController extends Controller{
                                 if(!empty($request->address)){
                                     $query->whereRaw('LOWER(v.address) like ?' , '%'.strtolower($request->address).'%');
                                 }
+
+                                if(!empty($request->country_id)){
+                                    $query->where('v.country_id','=',$request->country_id);
+                                }
+
+                                if(!empty($request->city_id)){
+                                    $query->where('v.city_id','=',$request->city_id);
+                                }
                            
                             })
                             ->get();
