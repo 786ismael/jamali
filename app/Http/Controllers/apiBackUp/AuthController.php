@@ -127,6 +127,12 @@ class AuthController extends Controller{
         if(!empty($inputs['gender'])){
             $User->gender       = $inputs['gender'];
         }
+	if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
+            }
         
         $User->save();
         if($User){
@@ -748,7 +754,7 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             'id'                => 'required',
             'role'              => 'required',
             'user_name'         => 'required',
-            'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
+            #'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
             'phone_number'      => ['required', Rule::unique('users', 'phone_number')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
         ];
 
@@ -756,7 +762,7 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             'id.required'               => __('Id field is required'),
             'role.required'             => __('Role field is required'),
             'user_name.required'        => __('User name field is required'),
-            'email.required'            => __('Email field is required'),
+           // 'email.required'            => __('Email field is required'),
             'phone_number.required'     => __('Phone field is required')
         ];
 
@@ -795,6 +801,12 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             }
             if(!empty($inputs['description'])){
                 $User->description       = $inputs['description'];
+            }
+	    if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
             }
             if($User->update()){
                 $User = User::find($User->id);

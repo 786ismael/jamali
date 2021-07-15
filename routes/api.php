@@ -10,7 +10,7 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::post('/update_details_1', 'api\AuthController@update_details1');
 	Route::post('/login', 'api\AuthController@login');
 	Route::post('/social_login', 'api\AuthController@socialLogin');
-	
+
 	Route::post('/resend_otp', 'api\AuthController@resendOtp');
 	Route::post('/otp_verify', 'api\AuthController@otpVerify');
 	Route::post('/forgot_password', 'api\AuthController@forgotPassword');
@@ -25,7 +25,7 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::post('/profile_image_update', 'api\AuthController@profileImageUpdate');
 	Route::post('/add_app_rating', 'api\AuthController@addAppRating');
 	Route::post('/send_support_request', 'api\AuthController@sendSupportRequest');
-	
+
 	Route::get('/get_profile', 'api\AuthController@getProfile');
 	Route::get('/get_notfication', 'api\AuthController@getNotfication');
 	Route::get('/get_vehicle_type', 'api\AuthController@getVehicleType');
@@ -34,8 +34,8 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::get('/get_app_rating', 'api\AuthController@getAppRating');
 	Route::get('/get_notfication_count', 'api\AuthController@getNotficationCount');
 	Route::get('/notfication_read', 'api\AuthController@notficationRead');
-	
-	
+
+
 
 	//============UserController==========================
 	Route::get('/user/get_home', 'api\UserController@getHome');
@@ -54,12 +54,12 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::get('/pay/remainng/amount', 'api\UserController@payRemainingAmount');
 	Route::get('/user/get_all_offers', 'api\UserController@getAllVendorOfferList');
 	//============VendorController==========================
-	
+
 	Route::get('/vendor/get_days', 'api\VendorController@getDays');
 	Route::post('/vendor/add_days', 'api\VendorController@addDays');
 	Route::get('/vendor/get_home', 'api\VendorController@getHome');
 	Route::get('/vendor/get_appointment_details', 'api\VendorController@getAppointmentDetails');
-	
+
 	Route::get('/vendor/get_category', 'api\VendorController@getCategory');
 	Route::post('/vendor/add_service', 'api\VendorController@addService');
 	Route::get('/vendor/get_services', 'api\VendorController@getServices');
@@ -85,7 +85,7 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::get('/user/status', 'api\PaymentController@getPaymentStatus');
 	Route::get('/users/{id}', 'api\UserController@getUser');
 	Route::get('/get_all_users', 'api\UserController@getAllUser');
-	
+
 
 	Route::post('/vendor/add_product', 'api\VendorController@addProduct');
 	Route::get('/vendor/get_product', 'api\VendorController@getProduct');
@@ -97,7 +97,7 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::post('/vendor/add_offers','api\VendorController@vendorOfferAdd');
 	Route::get('/vendor/get_offers','api\VendorController@getVendorOfferList');
 	Route::get('/vendor/delete_offer','api\VendorController@deleteVendorOfferList');
-	
+
 });
 
 Route::get('/term-condition', 'api\AuthController@termCondition');
