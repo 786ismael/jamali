@@ -38,7 +38,7 @@ $(document).ready(function(){
 	});
 
 	$('body').on('click','.delete', function() {
-        var delete_id = $('[data_delete]').attr('data_delete');
+        var delete_id = $(this).attr('data_delete');
         var path='admin/city/delete';
 
         swal({

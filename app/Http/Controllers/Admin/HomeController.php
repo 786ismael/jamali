@@ -216,6 +216,7 @@ class HomeController extends Controller{
 
     public function deleteCity(Request $request){
         $id = decrypt($request->id);
+
         if(City::where('city_id',$id)->delete()){
             return response(['status' => 1 , 'message' => __('City deleted Successfully')]);
         }else{
