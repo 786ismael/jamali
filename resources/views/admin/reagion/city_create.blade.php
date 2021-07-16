@@ -54,7 +54,6 @@
 					</div>
 					<div class="buttons">
 						<button type="submit" class="same-btn1">Save</button>
-						<button id="resetbtn" class="same-btn1">Reset</button>
 					</div>
 				</form>
 			</div>
