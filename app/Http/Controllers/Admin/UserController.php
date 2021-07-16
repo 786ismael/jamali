@@ -57,7 +57,7 @@ class UserController extends Controller{
                 }else{
                     $value->delivery_type='Custom';
                 }
-                
+
             }
             return datatables()->of($orders)->make(true);
         }
@@ -78,17 +78,17 @@ class UserController extends Controller{
         }else{
             $change_status='0';
         }
-        
+
         $User                       = User::find($inputs['id']);
         $User->active_status        = $change_status;
         if($User->update()){
             if($status==0){
                 return ['status' => 'success' , 'message' => 'User activated successfully', 'data'=>$User];
             }else{
-                return ['status' => 'success' , 'message' => 'User deactivated successfully', 'data'=>$User]; 
+                return ['status' => 'success' , 'message' => 'User deactivated successfully', 'data'=>$User];
             }
         }else{
-           return ['status' => 'failed' , 'message' => 'Status updated failed'];   
+           return ['status' => 'failed' , 'message' => 'Status updated failed'];
         }
     }
 
@@ -141,8 +141,8 @@ class UserController extends Controller{
             'email'   => 'required|unique:users,email,'.$id.',id,deleted_at,NULL',
             'phone'   => 'required|unique:users,phone_number,'.$id.',id,deleted_at,NULL',
          ];
- 
-           // Validate 
+
+           // Validate
           $validator = \Validator::make($request->all(), $rules);
           if($validator->fails()){
              return array('status' => 'error' , 'msg' => 'failed to add ad', '' , 'errors' => $validator->errors());

@@ -26,7 +26,7 @@ $(document).ready(function(){
 						var cheked="";
 					}
 					return '<label class="switch">'+
-					'<input type="checkbox" '+cheked+' class="active-status-change" value="'+column.active_status+'" user_id="'+column.id+'">'+
+					'<input type="checkbox" '+cheked+' class="active-status-change" value="'+column.status+'" user_id="'+column.id+'">'+
 					'<span class="slider round"></span>'+
 					'</label>' ;
 				}
@@ -36,39 +36,88 @@ $(document).ready(function(){
 				render: function (data, type, column, meta) {
 				return '<div class="btns">'+
 					'<a href="'+base_url+'/admin/region/edit/'+column.id+'"><button class="pen"><i class="fa fa-pencil"></i></button></a>'+
-					'<a href="'+base_url+'/admin/region/delete/'+column.id+'"><button class="pen"><i class="fa fa-trash"></i></button></a>'+
+					'<button class="pen delete" data_delete="'+column.id+'"><i class="fa fa-trash"></i></button>'+
 					'</div>' ;
 				}
 			}
 		]
 	});
 
+    $('body').on('click','.delete', function() {
+        var delete_id = $('[data_delete]').attr('data_delete');
+        var path='admin/reagion/delete';
+
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this record!",
+            icon: "warning",
+            buttons: [
+              'No, cancel it!',
+              'Yes, I am sure!'
+            ],
+            dangerMode: true,
+         },
+         function(isConfirm){
+
+           if (isConfirm){
+
+            $.ajax({
+                "headers":{
+                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                },
+                'type':'POST',
+                'url' :  base_url + '/' +path,
+                'data' : {  id : delete_id },
+                'beforeSend': function() {
+
+                },
+                'success' : function(response){
+                if(response.status == 1){
+                    swal(response.status ,response.message, 'success');
+                    setTimeout(function(){
+                        window.location.reload();
+                    },2000);
+                    }
+                },
+                'error' :  function(errors){
+                    console.log(errors);
+                },
+                'complete': function() {
+
+                }
+            });
+
+            } else {
+                swal("Cancelled", "Your Record is safe :)", "error");
+            }
+         });
+    });
+
 	$('body').on('click','.active-status-change', function() {
 		var user_id = $(this).attr("user_id");
 		//status=$('.active-status-change').val();
 		status=$(this).closest('tr').find('.active-status-change').val();
-
-		if(status==0){
-			var success_status='Activate';
-		}else{
-			var success_status='Deactivate';
-		}
-		path='admin/vendor/active_status_change/';
+        if(status == 1){
+            success_status = 'Deactivated';
+        }else{
+            success_status = 'Activated';
+        }
+		path='admin/reagion/active_status_change/';
 
 		$.ajax({
-			"headers":{
-				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-			},
-			'type':'PUT',
-			'url' :  base_url + '/' +path,
-			'data' : {  id : user_id, status:status },
-			'beforeSend': function() {
+            "headers":{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            },
+            'type':'GET',
+            'url' :  base_url + '/' +path,
+            'data' : {  id : user_id, status:status },
+            'beforeSend': function() {
 
-			},
-			'success' : function(response){
+            },
+                'success' : function(response){
 			if(response.status == 'success'){
 				swal(success_status ,response.message, 'success')
-				$('.active-status-change').val(response.data.active_status);
+				$('.active-status-change').val(response.data.status);
 					if(status==1){
 						$(this).closest('tr').find('.active-status-change').prop('checked', false);
 					}else{
@@ -85,93 +134,6 @@ $(document).ready(function(){
 		});
 	});
 
-	$('body').on('click','.approve-status-change', function() {
-		//console.log("Ganesh");
-		//return false;
-		var user_id = $(this).attr("user_id");
-		//status=$('.active-status-change').val();
-		status=$(this).closest('tr').find('.approve-status-change').val();
-
-		if(status==0){
-			var success_status='Approved';
-		}else{
-			var success_status='Unapproved';
-		}
-		path='admin/vendor/approve_status_change/';
-
-		$.ajax({
-			"headers":{
-				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-			},
-			'type':'PUT',
-			'url' :  base_url + '/' +path,
-			'data' : {  id : user_id, status:status },
-			'beforeSend': function() {
-
-			},
-			'success' : function(response){
-			if(response.status == 'success'){
-				swal(success_status ,response.message, 'success')
-				$('.active-status-change').val(response.data.active_status);
-					/*if(status==1){
-						$(this).closest('tr').find('.active-status-change').prop('checked', false);
-					}else{
-						$(this).closest('tr').find('.active-status-change').prop('checked', true);
-					}*/
-				}
-			},
-			'error' :  function(errors){
-				console.log(errors);
-			},
-			'complete': function() {
-
-			}
-		});
-	});
-
-	$('body').on('change','.approve-status-change', function() {
-		//console.log("Ganesh");
-		//return false;
-		var user_id = $(this).attr("user_id");
-		//status=$('.active-status-change').val();
-		status=$(this).closest('tr').find('.approve-status-change').val();
-
-		if(status==0){
-			var success_status='Approved';
-		}else{
-			var success_status='Unapproved';
-		}
-		path='admin/vendor/approve_status_change/';
-
-		$.ajax({
-			"headers":{
-				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-			},
-			'type':'PUT',
-			'url' :  base_url + '/' +path,
-			'data' : {  id : user_id, status:status },
-			'beforeSend': function() {
-
-			},
-			'success' : function(response){
-			if(response.status == 'success'){
-				swal(success_status ,response.message, 'success')
-				$('.active-status-change').val(response.data.active_status);
-					/*if(status==1){
-						$(this).closest('tr').find('.active-status-change').prop('checked', false);
-					}else{
-						$(this).closest('tr').find('.active-status-change').prop('checked', true);
-					}*/
-				}
-			},
-			'error' :  function(errors){
-				console.log(errors);
-			},
-			'complete': function() {
-
-			}
-		});
-	});
 
 	$('select[name="vendor_type"]').on('change',function(e){
 		Datatables.column(2).search($(this).val()).draw();

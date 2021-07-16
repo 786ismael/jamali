@@ -128,4 +128,37 @@ class HomeController extends Controller{
             return  redirect('/add-schedule-trip')->with('status' , 'failed' )->with('message' , __('Country update failed!'));
         }
     }
+
+    public function deleteReagion(Request $request){
+        $id = decrypt($request->id);
+        if(Country::where('id',$id)->delete()){
+            return response(['status' => 1 , 'message' => __('Country deleted Successfully')]);
+        }else{
+            return response(['status' => 0 , 'message' => __('Country delete failed')]);
+        }
+    }
+
+    public function activeStatusChange(Request $request){
+        $inputs                     = $request->all();
+        $status=$inputs['status'];
+        if($status=='0'){
+            $change_status='1';
+        }else{
+            $change_status='0';
+        }
+
+        $User                       = Country::find(decrypt($inputs['id']));
+        $User->status        = $change_status;
+        if($User->update()){
+            if($status==0){
+                return ['status' => 'success' , 'message' => 'Record activated successfully', 'data'=>$User];
+            }else{
+                return ['status' => 'success' , 'message' => 'Record deactivated successfully', 'data'=>$User];
+            }
+        }else{
+           return ['status' => 'failed' , 'message' => 'Status updated failed'];
+        }
+    }
+
+
 }

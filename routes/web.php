@@ -81,4 +81,5 @@ Route::get('admin/region/create', 'Admin\HomeController@createReagion')->name('a
 Route::post('admin/reagion/store', 'Admin\HomeController@storeReagion')->name('admin.reagion.store');
 Route::get('admin/region/edit/{id}', 'Admin\HomeController@editReagion')->name('admin.reagion.edit');
 Route::post('admin/reagion/update', 'Admin\HomeController@updateReagion')->name('admin.reagion.update');
-
+Route::post('admin/reagion/delete', 'Admin\HomeController@deleteReagion');
+Route::get('admin/reagion/active_status_change', 'Admin\HomeController@activeStatusChange');
