@@ -274,7 +274,7 @@ class VendorController extends Controller
                 'service_for.required'      => __('Service for field is required'),
                 'service_name_english.required'     => __('Service name field is required'),
                 'category_id.required'      => __('Category id field is required'),
-                'rate.required'             => __('Rating field is required'),
+                'rate.required'             => __('Rate field is required'),
                 //'time_slots.required'       => $langData['time_slots'],
             ];
         }else{
@@ -291,7 +291,7 @@ class VendorController extends Controller
                 'service_for.required'     => __('Service for field is required'),
                 'service_name_english.required'     => __('Service name field is required'),
                 'category_id.required'      =>__('Category id field is required'),
-                'rate.required'             => __('Rating field is required'),
+                'rate.required'             => __('Rate field is required'),
                 //'time_slots.required'       => $langData['time_slots'],
             ];
         }
