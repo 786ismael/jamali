@@ -754,7 +754,7 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             'id'                => 'required',
             'role'              => 'required',
             'user_name'         => 'required',
-            #'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
+//            'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
             'phone_number'      => ['required', Rule::unique('users', 'phone_number')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
         ];
 
@@ -782,7 +782,7 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
 
             $User                     = User::find($userStatus->id);
             $User->user_name          = $inputs['user_name'];
-            $User->email              = $inputs['email'];
+            $User->email              = $inputs['email']?? NULL;
             //$User->phone_number       = $inputs['phone_number'];
             if(!empty($inputs['phone_number'])){
                 $User->phone_number       = $inputs['phone_number'];
@@ -799,8 +799,17 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             if(!empty($inputs['lng'])){
                 $User->lng       = $inputs['lng'];
             }
-            if(!empty($inputs['description'])){
-                $User->description       = $inputs['description'];
+	    if(!empty($inputs['description_english'])){
+                $User->description       = $inputs['description_english'] ?? '';
+            }
+            if(!empty($inputs['description_arabic'])){
+                $User->description_ar    = $inputs['description_arabic'] ?? '';
+            }
+            if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
             }
 	    if(!empty($inputs['country_id'])){
                 $User->country_id    = $inputs['country_id'] ?? '';

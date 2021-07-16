@@ -777,9 +777,10 @@ class AuthController extends Controller{
                 request()->profile_image->move(public_path('uploads/profiles/'), $profile_image);
             }
 
+
             $User                     = User::find($userStatus->id);
             $User->user_name          = $inputs['user_name'];
-            $User->email              = $inputs['email'] ?? NULL;
+            $User->email              = !empty($inputs['email'])?$inputs['email'] : NULL;
             $User->phone_number       = $inputs['phone_number'];
             if(!empty($inputs['phone_number'])){
                 $User->phone_number       = $inputs['phone_number'];
