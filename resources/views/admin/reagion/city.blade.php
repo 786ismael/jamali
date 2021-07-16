@@ -20,7 +20,7 @@
 								<label>Search :</label>
 								<input type="text" name="">
 							</div>
-							{{-- <a href="{{route('admin/driver/create')}}"><button>Add Drivers</button></a> --}}
+							<a href="{{route('admin.city.create')}}"><button>Add City</button></a>
 						</div>
 					</div>
 					<div class="table-responsive">

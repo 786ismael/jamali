@@ -83,3 +83,10 @@ Route::get('admin/region/edit/{id}', 'Admin\HomeController@editReagion')->name('
 Route::post('admin/reagion/update', 'Admin\HomeController@updateReagion')->name('admin.reagion.update');
 Route::post('admin/reagion/delete', 'Admin\HomeController@deleteReagion');
 Route::get('admin/reagion/active_status_change', 'Admin\HomeController@activeStatusChange');
+
+Route::get('admin/create/city', 'Admin\HomeController@createCity')->name('admin.city.create');
+Route::post('admin/city/store', 'Admin\HomeController@storeCity')->name('admin.city.store');
+Route::get('admin/active_city_status_change', 'Admin\HomeController@activeCityStatusChange');
+Route::get('admin/city/edit/{id}', 'Admin\HomeController@editCity')->name('admin.reagion.edit');
+Route::post('admin/city/update', 'Admin\HomeController@updateCity')->name('admin.city.update');
+Route::post('admin/city/delete', 'Admin\HomeController@deleteCity')->name('admin.city.delete');

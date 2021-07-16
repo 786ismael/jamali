@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+use App\Helpers\ApiHelper;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Category;
@@ -8,6 +10,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Country;
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use Auth;
 use Datatables;
 use DB;
@@ -68,6 +71,7 @@ class HomeController extends Controller{
                         ->select('u.*')
                         //->leftJoin('zones as z', 'z.zone_id', '=', 'u.zone_id')
                         ->where('u.country_id', '=', decrypt($request->id))
+                        ->whereNull('deleted_at')
                         ->get();
             $number_key=1;
             foreach ($countries as $key => $value) {
@@ -100,7 +104,7 @@ class HomeController extends Controller{
         if($response){
             return  redirect('/admin/region')->with('status' , 'success' )->with('message' , __('Country added successfully!'));
         }else{
-            return  redirect('/add-schedule-trip')->with('status' , 'failed' )->with('message' , __('Country save failed!'));
+            return  redirect('/admin/region')->with('status' , 'failed' )->with('message' , __('Country save failed!'));
         }
     }
 
@@ -125,7 +129,7 @@ class HomeController extends Controller{
         if($country->save()){
             return  redirect('/admin/region')->with('status' , 'success' )->with('message' , __('Country updated successfully!'));
         }else{
-            return  redirect('/add-schedule-trip')->with('status' , 'failed' )->with('message' , __('Country update failed!'));
+            return  redirect('/add-rigion')->with('status' , 'failed' )->with('message' , __('Country update failed!'));
         }
     }
 
@@ -159,6 +163,88 @@ class HomeController extends Controller{
            return ['status' => 'failed' , 'message' => 'Status updated failed'];
         }
     }
+
+    public function createCity(Request $request){
+        $data['country'] = ApiHelper::country();
+        return view('admin.reagion.city_create',compact('data'));
+    }
+
+    public function storeCity(Request $request)
+    {
+        $inputs = array_except($request->all(), ['_token']);
+        $rules = [
+            'name'     => 'required'
+        ];
+
+        $this->validate($request,$rules);
+
+        $response = City::create($inputs);
+        $id = encrypt($inputs['country_id']);
+
+        if($response){
+            return  redirect('/admin/city/'.$id)->with('status' , 'success' )->with('message' , __('City added successfully!'));
+        }else{
+            return  redirect('/admin/city/'.$id)->with('status' , 'failed' )->with('message' , __('City save failed!'));
+        }
+    }
+
+    public function editCity(Request $request){
+        $id = decrypt($request->id);
+        $data['city'] = City::where('city_id',$id)->first();
+        $data['country'] = ApiHelper::country();
+        return view('admin.reagion.city_edit',compact('data'));
+    }
+
+    public function updateCity(Request $request){
+        $inputs = array_except($request->all(), ['_token']);
+        $rules = [
+            'name'     => 'required'
+        ];
+
+        $this->validate($request,$rules);
+        $id = decrypt($inputs['id']);
+        $city = City::find($id);
+
+        $city->country_id = $inputs['countries_name'];
+        $city->name = $inputs['name'];
+        if($city->save()){
+            return  redirect('/admin/city/'.encrypt($inputs['countries_name']))->with('status' , 'success' )->with('message' , __('City updated successfully!'));
+        }else{
+            return  redirect('/admin/city/'.encrypt($inputs['countries_name']))->with('status' , 'failed' )->with('message' , __('City update failed!'));
+        }
+    }
+
+    public function deleteCity(Request $request){
+        $id = decrypt($request->id);
+        if(City::where('city_id',$id)->delete()){
+            return response(['status' => 1 , 'message' => __('City deleted Successfully')]);
+        }else{
+            return response(['status' => 0 , 'message' => __('City delete failed')]);
+        }
+    }
+
+    public function activeCityStatusChange(Request $request){
+        $inputs                     = $request->all();
+        $status=$inputs['status'];
+        if($status=='0'){
+            $change_status='1';
+        }else{
+            $change_status='0';
+        }
+
+        $User                       = City::find(decrypt($inputs['id']));
+        $User->status        = $change_status;
+        if($User->update()){
+            if($status==0){
+                return ['status' => 'success' , 'message' => 'Record activated successfully', 'data'=>$User];
+            }else{
+                return ['status' => 'success' , 'message' => 'Record deactivated successfully', 'data'=>$User];
+            }
+        }else{
+           return ['status' => 'failed' , 'message' => 'Status updated failed'];
+        }
+    }
+
 
 
 }

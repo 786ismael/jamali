@@ -135,8 +135,8 @@ $(document).ready(function(){
 	});
 
 
-	$('select[name="vendor_type"]').on('change',function(e){
-		Datatables.column(2).search($(this).val()).draw();
-	});
+	// $('select[name="vendor_type"]').on('change',function(e){
+	// 	Datatables.column(2).search($(this).val()).draw();
+	// });
 
 });
