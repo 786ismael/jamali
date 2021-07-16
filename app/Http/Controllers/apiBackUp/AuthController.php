@@ -127,7 +127,6 @@ class AuthController extends Controller{
         if(!empty($inputs['gender'])){
             $User->gender       = $inputs['gender'];
         }
-
 	if(!empty($inputs['country_id'])){
                 $User->country_id    = $inputs['country_id'] ?? '';
             }
@@ -763,7 +762,7 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             'id.required'               => __('Id field is required'),
             'role.required'             => __('Role field is required'),
             'user_name.required'        => __('User name field is required'),
-  //          'email.required'            => __('Email field is required'),
+           // 'email.required'            => __('Email field is required'),
             'phone_number.required'     => __('Phone field is required')
         ];
 
@@ -807,6 +806,12 @@ $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
                 $User->description_ar    = $inputs['description_arabic'] ?? '';
             }
             if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
+            }
+	    if(!empty($inputs['country_id'])){
                 $User->country_id    = $inputs['country_id'] ?? '';
             }
             if(!empty($inputs['city_id'])){

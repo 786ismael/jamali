@@ -19,7 +19,7 @@
 						<li>
 							<a class="@if((substr(strrchr(url()->current(),"/"),1)=='user')){{'active'}}@endif" href="{{route('admin/user/index')}}"><i class="fa fa-user"></i> <span>Users</span></a>
 						</li>
-						
+
 						<li>
 							<a class="@if((substr(strrchr(url()->current(),"/"),1)=='vendor')){{'active'}}@endif" href="{{route('admin/vendor/index')}}"><i class="fa fa-users"></i> <span>Vendors</span></a>
 						</li>
@@ -31,6 +31,9 @@
 						</li>
 						<li>
 							<a class="@if((substr(strrchr(url()->current(),"/"),1)=='page')){{'active'}}@endif" href="{{route('landing.index')}}"><i class="fa fa-list-alt"></i> <span>Landing Page</span></a>
+						</li>
+                        <li>
+							<a class="@if((substr(strrchr(url()->current(),"/"),1)=='region')){{'active'}}@endif" href="{{route('admin.region')}}"><i class="fa fa-mars-stroke"></i> <span>Reagion</span></a>
 						</li>
 					</ul>
 				</div>

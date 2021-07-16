@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/demo', 'Admin\UserController@index')->name('index');
 
 Route::get('users', 'Admin\UserController@index');
-Route::get('users-list', 'Admin\UserController@usersList'); 
+Route::get('users-list', 'Admin\UserController@usersList');
 Route::get('term_condition', 'Admin\HomeController@termCondition')->name('term_condition');
 
 Route::get('payment', 'PaymentController@paymentForm')->name('payment.form');
@@ -74,3 +74,19 @@ Route::get('admin/landing/page/add', 'Admin\LandingPageController@create')->name
 Route::put('admin/landing/page/update', 'Admin\LandingPageController@update')->name('landing.update');
 
 Route::get('admin/landing/page/delete', 'Admin\LandingPageController@delete')->name('landing.delete');
+
+Route::get('admin/region', 'Admin\HomeController@region')->name('admin.region');
+Route::get('admin/city/{id}', 'Admin\HomeController@city')->name('admin.city');
+Route::get('admin/region/create', 'Admin\HomeController@createReagion')->name('admin.region.create');
+Route::post('admin/reagion/store', 'Admin\HomeController@storeReagion')->name('admin.reagion.store');
+Route::get('admin/region/edit/{id}', 'Admin\HomeController@editReagion')->name('admin.reagion.edit');
+Route::post('admin/reagion/update', 'Admin\HomeController@updateReagion')->name('admin.reagion.update');
+Route::post('admin/reagion/delete', 'Admin\HomeController@deleteReagion');
+Route::get('admin/reagion/active_status_change', 'Admin\HomeController@activeStatusChange');
+
+Route::get('admin/create/city', 'Admin\HomeController@createCity')->name('admin.city.create');
+Route::post('admin/city/store', 'Admin\HomeController@storeCity')->name('admin.city.store');
+Route::get('admin/active_city_status_change', 'Admin\HomeController@activeCityStatusChange');
+Route::get('admin/city/edit/{id}', 'Admin\HomeController@editCity')->name('admin.reagion.edit');
+Route::post('admin/city/update', 'Admin\HomeController@updateCity')->name('admin.city.update');
+Route::post('admin/city/delete', 'Admin\HomeController@deleteCity')->name('admin.city.delete');
