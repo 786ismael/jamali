@@ -261,7 +261,7 @@ class UserController extends Controller{
              //     $VendorServices[$key]->vendor_profile_image = $this->getProfileImage($value->vendor_profile_image);
             }
         }
-        return response(['status' => true , 'message' => __('Record not found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices,'offer_data'=>$offerData]);
+        return response(['status' => true , 'message' => __('Record found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices,'offer_data'=>$offerData]);
     }
 
     public function getCategory(Request $request){
