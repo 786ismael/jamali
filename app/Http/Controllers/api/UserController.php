@@ -51,7 +51,7 @@ class UserController extends Controller{
                             ->where(function($query) use($inputs){
                                 if(!empty($inputs['search_name'])){
                                     $query->whereRaw('LOWER(c.category_name) like ?' , '%'.strtolower($inputs['search_name']).'%');
-                                } 
+                                }
                             })
                             ->limit('10')
                             ->get();
@@ -62,7 +62,7 @@ class UserController extends Controller{
                 $Categories[$c_key]->category_name = $c_value->category_name_ar;
             }
         }
-        
+
         // $VendorServices = DB::table('vendor_services as vs')
         //                     ->select('vs.*', 'v.id as vendor_id' , 'v.vendor_type' , 'v.user_name as vendor_user_name', 'v.profile_image as vendor_profile_image', 'v.address as vendor_address',  'v.lat as vendor_lat', 'v.lng as vendor_lng' ,'c.category_name')
         //                     ->leftJoin('users as v','v.id','=','vs.vendor_id')
@@ -71,7 +71,7 @@ class UserController extends Controller{
         //                     ->where(function($query) use($inputs){
         //                         if(!empty($inputs['search_name'])){
         //                             $query->whereRaw('LOWER(vs.service_name) like ?' , '%'.strtolower($inputs['search_name']).'%');
-        //                         } 
+        //                         }
         //                     })
         //                     ->limit('10')
         //                     ->get();
@@ -83,7 +83,7 @@ class UserController extends Controller{
 
         $ArtistArr =[];
         $SalonArr =[];
-        
+
         if($VendorServices->toArray()){
             if(!empty($inputs['lat'])){
                 $lat1 = $inputs['lat'];
@@ -97,7 +97,7 @@ class UserController extends Controller{
                     if(!empty($value->vendor_lat)){
                         $lng2=$value->vendor_lng;
                     }else{
-                       $lng2='39.20221188797471'; 
+                       $lng2='39.20221188797471';
                     }
                     $unit='K';
                    // $getDistance=ApiHelper::getDistance($lat1, $lng1, $lat2, $lng2, $unit);
@@ -118,7 +118,7 @@ class UserController extends Controller{
                             $rating = round($rating_sum/$vendor_count,1);
                             $value->vendor_rating="$rating";
                         }
-                        
+
                     }else{
                         $value->vendor_rating='0';
                     }
@@ -129,7 +129,7 @@ class UserController extends Controller{
                     $data[$key1]  = $value1->distance;
                 }
                 array_multisort($data, SORT_ASC, $VendorServices);
-                
+
                 foreach ($VendorServices as $key3 => $value3) {
                     if($value3->vendor_type=='1'){
                         array_push($ArtistArr,$value3);
@@ -153,12 +153,12 @@ class UserController extends Controller{
                             ->whereNull('vs.deleted_at')
                             ->limit('10')
                             ->get();
-        
+
         if($VendorServices->toArray()){
              foreach($VendorServices as $key => $value){
                  $VendorServices[$key]->service_image = $this->getServiceImage($value->service_image);
                  $VendorServices[$key]->vendor_profile_image = $this->getProfileImage($value->vendor_profile_image);
-             }   
+             }
         }
 
         return response(['status' => true , 'message' => __('Record found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices]);
@@ -175,7 +175,7 @@ class UserController extends Controller{
                             ->where(function($query) use($inputs){
                                 if(!empty($inputs['search_name'])){
                                     $query->whereRaw('LOWER(c.category_name) like ?' , '%'.strtolower($inputs['search_name']).'%');
-                                } 
+                                }
                             })
                             ->limit('10')
                             ->get();
@@ -187,7 +187,7 @@ class UserController extends Controller{
                 }
             }
         }
-  
+
         $VendorServices = User::select('users.id as vendor_id' , 'users.vendor_type' , 'users.user_name as vendor_user_name', 'users.profile_image as vendor_profile_image', 'users.address as vendor_address',  'users.lat as vendor_lat', 'users.lng as vendor_lng')
                                  ->whereIn('users.vendor_type',['1','2'])
                                  ->where('role','!=','1')
@@ -215,7 +215,7 @@ class UserController extends Controller{
                         $rating = round($rating_sum/$vendor_count,1);
                         $value->vendor_rating="$rating";
                     }
-                    
+
                 }else{
                     $value->vendor_rating='0';
                 }
@@ -234,14 +234,14 @@ class UserController extends Controller{
                             ->whereNull('vs.deleted_at')
                             ->limit('10')
                             ->get();
-        
+
         if($VendorServices->toArray()){
              foreach($VendorServices as $key => $value){
                  if(app::getLocale() == 'ar')
                  $VendorServices[$key]->service_name = (!empty($value->service_name_ar) && !is_null($value->service_name_ar) ) ? $value->service_name_ar  :  $value->service_name;
                  $VendorServices[$key]->service_image = $this->getServiceImage($value->service_image);
                  $VendorServices[$key]->vendor_profile_image = $this->getProfileImage($value->vendor_profile_image);
-             }   
+             }
         }
 
         $offerData = DB::table('offers as o','v.service_name','v.service_name_ar','v.service_image')
@@ -251,12 +251,16 @@ class UserController extends Controller{
                             ->get();
         if($offerData->toArray()){
              foreach($offerData as $key => $value){
+                if(!empty($value->offer_image))
+                    $value->offer_image = asset('public/uploads/offer_image/'.$value->offer_image);
+                else
+                    $value->offer_image = asset('public/uploads/others/placeholder.png');
                  // if(app::getLocale() == 'ar')
                  // $VendorServices[$key]->service_name = (!empty($value->service_name_ar) && !is_null($value->service_name_ar) ) ? $value->service_name_ar  :  $value->service_name;
                  $offerData[$key]->service_image = $this->getServiceImage($value->service_image);
              //     $VendorServices[$key]->vendor_profile_image = $this->getProfileImage($value->vendor_profile_image);
-            }   
-        }                          
+            }
+        }
         return response(['status' => true , 'message' => __('Record not found') ,'data_1'=>$Categories , 'artist_data'=>$ArtistArr, 'salon_data'=>$SalonArr , 'vendor_services'=>$VendorServices,'offer_data'=>$offerData]);
     }
 
@@ -273,7 +277,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Category    = Category::select('category_id' , 'category_name', 'category_name_ar' , 'category_image')
                                 ->where(function($query) use ($inputs){
@@ -314,7 +318,7 @@ class UserController extends Controller{
                                 if(!empty($request->vendor_id)){
                                     $query->where('vs.vendor_id',$request->vendor_id);
                                 }
-                                
+
                                 if(!empty($request->min)){
                                     $query->where('vs.rate','>=',$request->min);
                                 }
@@ -343,7 +347,7 @@ class UserController extends Controller{
                                 if(!empty($request->city_id)){
                                     $query->where('v.city_id','=',$request->city_id);
                                 }
-                           
+
                             })
                             ->get();
         if($VendorServices->toArray()){
@@ -366,7 +370,7 @@ class UserController extends Controller{
                     if(!empty($value->vendor_lat)){
                         $lng2=$value->vendor_lng;
                     }else{
-                       $lng2='39.20221188797471'; 
+                       $lng2='39.20221188797471';
                     }
                     $unit='K';
                     $getDistance=ApiHelper::getDistance($lat1, $lng1, $lat2, $lng2, $unit);
@@ -436,7 +440,7 @@ class UserController extends Controller{
                     $value_2->user_profile_image=ImageHelper::getPortfolioImage($value_2->user_profile_image);
                 }
             }
-            
+
             $Vendor->vendor_services=$VendorServices;
             $Vendor->Vendor_portfolios=$VendorPortfolios;
             $Vendor->vendor_ratings=$vendorRatings;
@@ -447,7 +451,7 @@ class UserController extends Controller{
                                         ->where('vr.vendor_id',$Vendor->vendor_id)
                                         ->whereNull('vr.deleted_at')
                                         ->first();
-            
+
             $vendorProducts = DB::table('product')->select('id as product_id','product_name','product_name_ar','product_image','price','offer')->where('user_id',$inputs['vendor_id'])->get();
             if($vendorProducts->toArray()){
                 foreach($vendorProducts as $key => $value){
@@ -466,14 +470,14 @@ class UserController extends Controller{
                     $rating = round($rating_sum/$vendor_count,1);
                     $Vendor->rating="$rating";
                 }
-                
+
             }else{
                 $Vendor->rating='0';
             }
             $inputs['user_id'] = $inputs['user_id'] ?? '';
             $isExist = FavouriteVendor::where(['user_id'=>$inputs['user_id'],'vendor_id'=>$inputs['vendor_id']])->count();
             $Vendor->is_favourite = $isExist > 0 ? 1 : 0;
-            return response(['status' => true , 'message' => __('Record found') , 'data'=>$Vendor]); 
+            return response(['status' => true , 'message' => __('Record found') , 'data'=>$Vendor]);
            }else{
             return response(['status' => true , 'message' => __('Record not found') ]);
          }
@@ -481,7 +485,7 @@ class UserController extends Controller{
 
     public function getNearByService(Request $request){
         $langData   = trans('api_user');
-        $inputs     = $request->all();    
+        $inputs     = $request->all();
         $VendorServices = DB::table('vendor_services as vs')
                             ->select('vs.*', 'v.id as vendor_id', 'v.user_name as vendor_user_name', 'v.profile_image as vendor_profile_image', 'v.address as vendor_address', 'v.lat as vendor_lat', 'v.lng as vendor_lng' ,'c.category_name')
                             ->leftJoin('users as v','v.id','=','vs.vendor_id')
@@ -492,7 +496,7 @@ class UserController extends Controller{
                                     $query->whereRaw('LOWER(vs.service_name) like ?' , '%'.strtolower($inputs['search_name']).'%');
                                     $query->orWhereRaw('LOWER(c.category_name) like ?' , '%'.strtolower($inputs['search_name']).'%');
 
-                                } 
+                                }
                             })
                             ->get();
 
@@ -509,7 +513,7 @@ class UserController extends Controller{
                     if(!empty($value->vendor_lat)){
                         $lng2=$value->vendor_lng;
                     }else{
-                       $lng2='39.20221188797471'; 
+                       $lng2='39.20221188797471';
                     }
                     $unit='K';
                     $getDistance=ApiHelper::getDistance($lat1, $lng1, $lat2, $lng2, $unit);
@@ -536,10 +540,10 @@ class UserController extends Controller{
             return response(['status' => true , 'message' => __('Record found') ,'data'=>$VendorServices]);
         }else{
             return response(['status' => false , 'message' => __('Record not found') ]);
-        } 
+        }
     }
 
-    
+
 
 
 
@@ -556,7 +560,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointments = DB::table('appointments as ap')
                                 ->select('ap.*', 'v.id as vendor_id', 'v.user_name as vendor_user_name', 'v.profile_image as vendor_profile_image', 'v.address as vendor_address', 'v.lat as vendor_lat', 'v.lng as vendor_lng' ,'c.category_name','vr.rating','vr.review')
@@ -594,7 +598,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointment = DB::table('appointments as ap')
                                 ->select('ap.*', 'v.id as vendor_id', 'v.user_name as vendor_user_name', 'v.profile_image as vendor_profile_image', 'v.address as vendor_address', 'v.lat as vendor_lat', 'v.lng as vendor_lng' ,'c.category_name','vr.rating','vr.review')
@@ -628,7 +632,7 @@ class UserController extends Controller{
     }
 
     public function createOrder(Request $request){
-        
+
         $langData   = trans('api_user');
         $inputs = $request->all();
         $rules = [
@@ -650,7 +654,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $User = User::find($inputs['user_id']);
         $VendorService = VendorService::find($inputs['vendor_service_id']);
@@ -663,7 +667,7 @@ class UserController extends Controller{
         */
         $tax             = 15;
         $adminCommission = 10;
-       
+
         // $taxAmount               =  ($tax / 100) * $sericeAmount;
         // $totalServiceAmount      =  $sericeAmount + $taxAmount;
         // $bookingAmount           =  ($adminCommission/100) * $sericeAmount;
@@ -672,17 +676,17 @@ class UserController extends Controller{
         // $remainingServiceAmount  = $totalPayableAmount - $bookingAmount;
         //  $sericeAmount            = $request->servicecast;
 
-        $taxAmount               =  str_replace( array( '\'', '"', 
+        $taxAmount               =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->tax);
-        $totalServiceAmount      =  str_replace( array( '\'', '"', 
+        $totalServiceAmount      =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->totalamount);
-        $bookingAmount           =  str_replace( array( '\'', '"', 
+        $bookingAmount           =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->bookingamount);
-        $adminCommissionAmount   =  str_replace( array( '\'', '"', 
+        $adminCommissionAmount   =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->admincommision);
-        $totalPayableAmount      =  str_replace( array( '\'', '"', 
+        $totalPayableAmount      =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->netpaybleamount);
-        $remainingServiceAmount  =  str_replace( array( '\'', '"', 
+        $remainingServiceAmount  =  str_replace( array( '\'', '"',
         ',' , ';', '<', '>' ), ' ',$request->remain_amonunt);
 
         $Appointment = new Appointment();
@@ -741,7 +745,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $User = User::find($inputs['user_id']);
         $VendorService = VendorService::find($inputs['vendor_service_id']);
@@ -768,7 +772,7 @@ class UserController extends Controller{
         if($Appointment->save()){
             /** Notification */
                 $UserStaust = User::select('id','user_name')->where('role','2')->where('active_status','1')->where('id',$Appointment->user_id)->first();
-                
+
                 $Vendor = User::select('id' , 'lat' , 'lng' , 'notification_status' , 'device_type' , 'device_token', 'language')->where('role','3')->where('id',$Appointment->vendor_id)->first();
                 if($Vendor){
                         $title              = 'New booking';
@@ -797,7 +801,7 @@ class UserController extends Controller{
                             ApiHelper::vendorIosNotification($device_token,$notificationData['title']);
                     }
                 }
-            return response(['status' => true , 'message' => __('Thank you to place order') ]); 
+            return response(['status' => true , 'message' => __('Thank you to place order') ]);
         }else{
             return response(['status' => false , 'message' => __('Failed to place order')]);
         }
@@ -822,7 +826,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         //==============User Check==============
         $UserStaust = User::where('role','2')->where('id',$inputs['user_id'])->first();
@@ -851,7 +855,7 @@ class UserController extends Controller{
                 return response(['status' => false , 'message' => __('Record not found') ]);
             }
         }else{
-            return response(['status' => false , 'message' => __('This user id does not exist') ]);  
+            return response(['status' => false , 'message' => __('This user id does not exist') ]);
         }
     }
 
@@ -887,7 +891,7 @@ class UserController extends Controller{
                     $Appointment->update();
 
                     $UserStaust = User::select('id','user_name')->where('role','2')->where('active_status','1')->where('id',$Appointment->user_id)->first();
-                    
+
                     $Vendor = User::select('id' , 'lat' , 'lng' , 'notification_status' , 'device_type' , 'device_token', 'language')->where('role','3')->where('id',$Appointment->vendor_id)->first();
                     if($Vendor){
                             $title              = 'Payment Successfully';
@@ -923,7 +927,7 @@ class UserController extends Controller{
 
                 }
                 return Redirect('api/user/success');
-                
+
             }else{
                 return Redirect('api/user/error');
             }
@@ -940,10 +944,10 @@ class UserController extends Controller{
         return view('paypal.cancel');
     }
 
-    public function getUser($id){   
-        $langData   = trans('api_user');     
+    public function getUser($id){
+        $langData   = trans('api_user');
         $user = User::where('vendor_type',$id)->where('role','!=','1')->whereNull('deleted_at')->get();
-        
+
             if(!empty($user)){
                 foreach ($user as $key => $res) {
                     if(!empty($res->profile_image)){
@@ -951,7 +955,7 @@ class UserController extends Controller{
                     }else{
                         $res->profile_image = asset('public/uploads/profiles/user-image-not-available.jpg');
                     }
-                    
+
                     $rating = DB::table('vendor_ratings as vr')->where('vendor_id',$res->id)->avg('rating');
                     $user[$key]->vendor_rating = round($rating);
                 }
@@ -959,22 +963,22 @@ class UserController extends Controller{
                 if($id == 1){
                     return response(['status' => true , 'message' => __('Record found') ,'data'=>$user]);
                 }else{
-                    return response(['status' => true , 'message' => __('Record not found') ,'data'=>$user]); 
+                    return response(['status' => true , 'message' => __('Record not found') ,'data'=>$user]);
                 }
             }else{
                 if($id == 1){
-                    return response(['status' => false , 'message' => __('Record found') ]); 
+                    return response(['status' => false , 'message' => __('Record found') ]);
                 }else{
-                    return response(['status' => false , 'message' => __('Record not found') ]); 
+                    return response(['status' => false , 'message' => __('Record not found') ]);
                 }
-                
+
             }
-        
+
     }
 
     public function getAllUser(Request $request){
 
-        $langData   = trans('api_user');     
+        $langData   = trans('api_user');
 
         $user       = User::where('active_status','1')
                            ->where(function($query) use ($request){
@@ -983,18 +987,18 @@ class UserController extends Controller{
                                }
                            })
                            ->whereNull('deleted_at')->get();
-        
+
             if(!empty($user)){
                 foreach ($user as $key => $res) {
                     if(!empty($res->profile_image)){
                         $res->profile_image = asset('public/uploads/profiles/'.$res->profile_image);
                     }else{
                         $res->profile_image = asset('public/uploads/profiles/user-image-not-available.jpg');
-                    }                    
+                    }
                 }
                     return response(['status' => true , 'message' => __('Record found') ,'data'=>$user]);
             }else{
-                    return response(['status' => false , 'message' => __('Record not found') ]); 
+                    return response(['status' => false , 'message' => __('Record not found') ]);
             }
     }
 
@@ -1012,8 +1016,8 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
-        }        
+            return response(['status' => false , 'message' => $errors[0]] , 200);
+        }
         $VendorService = VendorService::select('vendor_services.*','c.category_name','c.category_name_ar','v.user_name as vendor_name','v.profile_image as vendor_profile','v.specialist as vendor_description','v.address','o.price as offer_amount','o.offer_type')
                                 ->leftJoin('categories as c','c.category_id','=','vendor_services.category_id')
                                 ->leftJoin('users as v','v.id','=','vendor_services.vendor_id')
@@ -1067,7 +1071,7 @@ class UserController extends Controller{
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointments = DB::table('appointments as ap')
                                 ->select('ap.*', 'v.id as vendor_id', 'v.user_name as vendor_user_name', 'v.profile_image as vendor_profile_image', 'v.address as vendor_address', 'v.lat as vendor_lat', 'v.lng as vendor_lng' ,'c.category_name','vr.rating','vr.review')
@@ -1093,7 +1097,7 @@ class UserController extends Controller{
             return response(['status' => false , 'message' => __('Record not found') ]);
         }
     }
-    
+
     public function payRemainingAmount(Request $request){
          $Appointment = Appointment::find($request->appointment_id);
          $amount = $Appointment->remaining_amount;
@@ -1113,9 +1117,9 @@ class UserController extends Controller{
 
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]]);              
+            return response(['status' => false , 'message' => $errors[0]]);
         }
-        
+
         $isExist = FavouriteVendor::where($input)->count();
 
         if($isExist){
@@ -1123,10 +1127,10 @@ class UserController extends Controller{
         }
 
         $insertId  = FavouriteVendor::insert($input);
-      
+
         if($insertId)
              return ['status'=>true,'message'=>__('Success')];
-        else 
+        else
              return ['status'=>false,'message'=>__('Failed')];
 
     }
@@ -1144,14 +1148,14 @@ class UserController extends Controller{
 
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]]);              
+            return response(['status' => false , 'message' => $errors[0]]);
         }
 
         $favouriteVendor  = FavouriteVendor::where($input)->first();
 
         if($favouriteVendor && $favouriteVendor->delete())
              return ['status'=>true,'message'=>__('Success')];
-        else 
+        else
              return ['status'=>false,'message'=>__('Failed')];
 
     }
@@ -1168,7 +1172,7 @@ class UserController extends Controller{
 
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]]);              
+            return response(['status' => false , 'message' => $errors[0]]);
         }
 
         $favouriteVendors  = FavouriteVendor::where('user_id',$input['user_id'])->get();
@@ -1200,7 +1204,7 @@ class UserController extends Controller{
     }
 
     public function getAllVendorOfferList (Request $request)
-    {        
+    {
         $langData   = trans('api_vendor');
         // $rules = [
         //     'user_id'                   => 'required',
@@ -1211,7 +1215,7 @@ class UserController extends Controller{
         // $validator = Validator::make($request->all(), $rules , $message);
         // if ($validator->fails()) {
         //     $errors =  $validator->errors()->all();
-        //     return response(['status' => false , 'message' => $errors[0]] , 200);              
+        //     return response(['status' => false , 'message' => $errors[0]] , 200);
         // }
         $getList = \DB::table('offers')->select('offers.*','vendor_services.service_name','vendor_services.service_name_ar')
                     ->leftJoin('vendor_services', function($join) {
@@ -1219,6 +1223,13 @@ class UserController extends Controller{
                     })->orderBy('id','desc')->get();
 
         if(count($getList) > 0)  {
+            foreach($getList as $gl){
+                if(!empty($gl->offer_image))
+                    $gl->offer_image = asset('public/uploads/offer_image/'.$gl->offer_image);
+                else
+                $gl->offer_image = asset('public/uploads/others/placeholder.png');
+
+            }
             return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
         }else{
             return (['status' => false, 'message' => __('No Record Found'), 'data' => [] ]);
