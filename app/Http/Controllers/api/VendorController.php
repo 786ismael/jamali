@@ -49,7 +49,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorDays = DB::table('vendor_days as vd')
                             ->select('day_id','day_name','day_status','start_time','end_time')
@@ -59,9 +59,9 @@ class VendorController extends Controller
         if($VendorDays->toArray()){
             $Days = $VendorDays;
         }else{
-           $Days = DB::table('days as d')->select('day_id','day_name','day_status','start_time','end_time')->whereNull('d.deleted_at')->get(); 
+           $Days = DB::table('days as d')->select('day_id','day_name','day_status','start_time','end_time')->whereNull('d.deleted_at')->get();
         }
-        
+
         if($Days->toArray()){
             return response(['status' => true , 'message' => __('Record found') ,'data'=>$Days]);
         }else{
@@ -83,18 +83,18 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         //return $inputs['days_data'];
         //return $inputs;
         //$daysData  = json_encode($inputs['days_data'], TRUE);
         $daysData  = json_decode($inputs['days_data'], TRUE);
 
-        
+
         if($daysData){
             //print_r($daysData);
             //die;
-            DB::table('vendor_days')->where('vendor_id', $inputs['user_id'])->delete(); 
+            DB::table('vendor_days')->where('vendor_id', $inputs['user_id'])->delete();
             $VendorDay=[];
             foreach ($daysData as $key => $value) {
                 $tmp                = [];
@@ -111,7 +111,7 @@ class VendorController extends Controller
                 array_push($VendorDay, $tmp);
             }
         }
-        if($VendorDay){ 
+        if($VendorDay){
             VendorDay::insert($VendorDay);
             $VendorDay = VendorDay::where('vendor_id',$inputs['user_id'])->whereNull('deleted_at')->first();
             //return $VendorDay;
@@ -141,7 +141,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointments = DB::table('appointments as ap')
                                 ->select('ap.*','u.profile_image')
@@ -157,7 +157,7 @@ class VendorController extends Controller
                                 ->whereNull('ap.deleted_at')
                                 ->orderBy('ap.appointment_date','asc')
                                 ->get();
-       
+
         if($Appointments->toArray()){
             foreach ($Appointments as $key => $value) {
                 $value->profile_image=ImageHelper::getProfileImage($value->profile_image);
@@ -184,7 +184,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointment = DB::table('appointments as ap')
                                 ->select('ap.*','u.profile_image')
@@ -194,7 +194,7 @@ class VendorController extends Controller
                                 ->where('ap.appointment_id',$inputs['appointment_id'])
                                 ->whereNull('ap.deleted_at')
                                 ->first();
-       
+
         if($Appointment){
             $Appointment->profile_image=ImageHelper::getProfileImage($Appointment->profile_image);
             $Appointment->appointment_time = date('h:i A',strtotime($Appointment->appointment_time));
@@ -232,7 +232,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Category    = Category::select('category_id' , 'category_name', 'category_name_ar' ,'category_image')
                                 ->where(function($query) use ($inputs){
@@ -258,7 +258,7 @@ class VendorController extends Controller
     public function addService(Request $request){
         $langData   = trans('api_vendor');
         $inputs = $request->all();
-        
+
         if(!empty($inputs['service_image'])){
             $rules = [
                 'user_id'                   => 'required',
@@ -299,7 +299,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorService                  = new VendorService();
         $VendorService->vendor_id       = $inputs['user_id'];
@@ -312,12 +312,12 @@ class VendorController extends Controller
         $VendorService->rate            = $inputs['rate'];
         $VendorService->service_cost    = $inputs['rate'] ?? '0';
         $VendorService->booking_amount  = $inputs['rate'] ?? '0';
-        
+
         if($request->hasFile('service_image')) {
             $service_image = str_random('10').'_'.time().'.'.request()->service_image->getClientOriginalExtension();
             request()->service_image->move(public_path('uploads/service_image/'), $service_image);
             $VendorService->service_image            = $service_image;
-        }        
+        }
         //$VendorService->time_slots      = $inputs['time_slots'];
         if($VendorService->save()){
             $VendorServiceStatus = VendorService::where('vendor_id',$inputs['user_id'])->whereNull('deleted_at')->first();
@@ -347,7 +347,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorServices = DB::table('vendor_services as vs')
                                 ->select('vs.*','c.category_name','c.category_name_ar')
@@ -384,7 +384,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
 
         $VendorService = DB::table('vendor_services as vs')
@@ -394,7 +394,7 @@ class VendorController extends Controller
                                 ->where('vs.vendor_service_id',$inputs['service_id'])
                                 ->whereNull('vs.deleted_at')
                                 ->first();
-       
+
         if(!empty($VendorService)){
             $VendorService->service_image=ImageHelper::getServiceImage($VendorService->service_image);
             return response(['status' => true , 'message' => __('Record not found') ,'data'=>$VendorService]);
@@ -446,12 +446,12 @@ class VendorController extends Controller
                 'rate.required'             => __('Rating field is required'),
                 //'time_slots.required'       => $langData['time_slots'],
             ];
-        }        
+        }
 
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorService                  = VendorService::find($inputs['service_id']);
         $VendorService->service_for     = $inputs['service_for'];
@@ -491,7 +491,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorService                  = VendorService::find($inputs['service_id']);
         if($VendorService->delete()){
@@ -523,7 +523,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         //===================Image Upload Hear============
         $data['thumb'] = NULL;
@@ -535,7 +535,7 @@ class VendorController extends Controller
             if($inputs['type'] == 2){
                 $filePath = public_path("uploads/portfolio/".$video_name);
                 $data['thumb'] = $fileTemName.".png";
-                $img = public_path("uploads/portfolio/".$data['thumb']);                
+                $img = public_path("uploads/portfolio/".$data['thumb']);
                 exec('ffmpeg -i '.$filePath.' -ss 00:00:05.000 -vframes 1 '.$img);
             }
         }
@@ -566,14 +566,14 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorPortfolios = DB::table('vendor_portfolios as vp')
                                 ->select('vp.*')
                                 ->where('vp.vendor_id',$inputs['user_id'])
                                 ->whereNull('vp.deleted_at')
                                 ->get();
-       
+
         if($VendorPortfolios->toArray()){
             foreach ($VendorPortfolios as $key => $value) {
                 $value->portfolio_image=ImageHelper::getPortfolioImage($value->portfolio_image);
@@ -601,7 +601,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorPortfolio                  = VendorPortfolio::find($inputs['vendor_portfolio_id']);
         if($VendorPortfolio->delete()){
@@ -627,7 +627,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointment=Appointment::find($inputs['appointment_id']);
         if($Appointment){
@@ -662,7 +662,7 @@ class VendorController extends Controller
                     $message            = 'Your booking completed by '.$Vendor->user_name;
                     $notification_key   = 'Order_Completed';
                 }
-                
+
                 if($User){
                     if($User->notification_status == '1'){
                       //  if($User->device_type== 'android'){
@@ -691,7 +691,7 @@ class VendorController extends Controller
                     }
                 }
                 if($inputs['status']=='1'){
-                    return response(['status' => true , 'message' => __('Appoitment accepted') ]); 
+                    return response(['status' => true , 'message' => __('Appoitment accepted') ]);
                 }elseif($inputs['status']=='2'){
                     return response(['status' => true , 'message' => __('Appointment declined') ]);
                 }elseif($inputs['status']=='3'){
@@ -699,7 +699,7 @@ class VendorController extends Controller
                 }else{
                     return response(['status' => true , 'message' =>__('Appointment declined') ]);
                 }
-                
+
             }else{
                 return response(['status' => true , 'message' => __('Something went wrong') ]);
             }
@@ -720,7 +720,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $Appointments = DB::table('appointments as ap')
                                 ->select('ap.*','u.profile_image')
@@ -733,7 +733,7 @@ class VendorController extends Controller
                                 ->whereNull('ap.deleted_at')
                                 ->orderBy('ap.appointment_date','asc')
                                 ->get();
-       
+
         if($Appointments->toArray()){
             foreach ($Appointments as $key => $value) {
                 $value->profile_image=ImageHelper::getProfileImage($value->profile_image);
@@ -748,11 +748,11 @@ class VendorController extends Controller
     public function addProduct(Request $request){
         $langData   = trans('api_vendor');
         $inputs = $request->all();
-        
+
         if(!empty($inputs['product_image'])){
             $rules = [
                 'user_id'                  => 'required',
-                'product_name_english'      => 'required',                
+                'product_name_english'      => 'required',
                 'price'                     => 'required',
                 'offer'                      => 'required',
                 'product_image' => 'required|image|mimes:jpeg,png,jpg'
@@ -769,7 +769,7 @@ class VendorController extends Controller
         }else{
             $rules = [
                 'user_id'                  => 'required',
-                'product_name_english'               => 'required',                
+                'product_name_english'               => 'required',
                 'price'                     => 'required',
                 'offer'                      => 'required',
                 //'time_slots'                => 'required',
@@ -786,22 +786,22 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $ProductService                  = new ProductService();
         $ProductService->user_id       = $inputs['user_id'];
         $ProductService->product_name     = $inputs['product_name_english'] ?? NULL;
-        $ProductService->product_name_ar  = $inputs['product_name_arabic']  ?? NULL;        
+        $ProductService->product_name_ar  = $inputs['product_name_arabic']  ?? NULL;
         $ProductService->price    = $inputs['price'];
         $ProductService->offer            = $inputs['offer'];
-        
+
         if($request->hasFile('product_image')) {
             $product_image = str_random('10').'_'.time().'.'.request()->product_image->getClientOriginalExtension();
             request()->product_image->move(public_path('uploads/product_image/'), $product_image);
             $ProductService->product_image            = $product_image;
-        }        
+        }
         //$ProductService->time_slots      = $inputs['time_slots'];
-        if($ProductService->save()){            
+        if($ProductService->save()){
             return response(['status' => true , 'message' => __('Successfully added product') ]);
         }else{
             return response(['status' => false , 'message' => __('Failed to add product') ]);
@@ -821,16 +821,16 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorServices = DB::table('product as p')
                                 ->where('p.user_id',$inputs['user_id'])
                                 ->whereNull('p.deleted_at')
                                 ->get();
-       
+
         if($VendorServices->toArray()){
             foreach ($VendorServices as $key => $v) {
-               // if(app::getLocale() == 'ar') 
+               // if(app::getLocale() == 'ar')
               //  $VendorServices[$key]->product_name = (!empty($v->product_name_ar) && !is_null($v->product_name_ar) ) ? $v->product_name_ar  :  $v->product_name;
                 $v->product_image=ImageHelper::getProductImage($v->product_image);
             }
@@ -856,15 +856,15 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
 
         $VendorService = DB::table('product as p')
                                 ->where('p.user_id',$inputs['user_id'])
                                 ->where('p.id',$inputs['product_id'])
-                                ->whereNull('p.deleted_at')                                
+                                ->whereNull('p.deleted_at')
                                 ->first();
-       
+
         if(!empty($VendorService)){
             $VendorService->product_image=ImageHelper::getProductImage($VendorService->product_image);
             return response(['status' => true , 'message' => __('Record found') ,'data'=>$VendorService]);
@@ -878,14 +878,14 @@ class VendorController extends Controller
         $inputs = $request->all();
         if(!empty($inputs['product_image'])){
             $rules = [
-                'id' => 'required',                
-                'product_name_english'               => 'required',                
+                'id' => 'required',
+                'product_name_english'               => 'required',
                 'price'                     => 'required',
                 'offer'                      => 'required',
                 'product_image' => 'required|image|mimes:jpeg,png,jpg'
                 //'time_slots'                => 'required',
             ];
-            $message = [                
+            $message = [
                 'product_name_english.required'     => __('Product name field is required'),
                 'product_image.required'     => __('Product image field is required'),
                 'price.required'      =>    __('Price field is required'),
@@ -894,13 +894,13 @@ class VendorController extends Controller
             ];
         }else{
             $rules = [
-                'id' => 'required',                
-                'product_name_english'               => 'required',                
+                'id' => 'required',
+                'product_name_english'               => 'required',
                 'price'                     => 'required',
                 'offer'                      => 'required',
                 //'time_slots'                => 'required',
             ];
-            $message = [                
+            $message = [
                 'product_name_english.required'     => __('Product name field is required'),
                 'product_image.required'     => __('Product image field is required'),
                 'price.required'      =>    __('Price field is required'),
@@ -912,13 +912,13 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorService                  = ProductService::find($inputs['id']);
         $VendorService->product_name     = $inputs['product_name_english'] ?? NULL;
-        $VendorService->product_name_ar  = $inputs['product_name_arabic']  ?? NULL;     
+        $VendorService->product_name_ar  = $inputs['product_name_arabic']  ?? NULL;
         $VendorService->price     = $inputs['price'];
-        $VendorService->offer    = $inputs['offer'];        
+        $VendorService->offer    = $inputs['offer'];
         if($request->hasFile('product_name')) {
             $product_name = str_random('10').'_'.time().'.'.request()->product_name->getClientOriginalExtension();
             request()->product_name->move(public_path('uploads/product_name/'), $product_name);
@@ -947,7 +947,7 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $VendorService                  = ProductService::find($inputs['product_id']);
         if($VendorService->delete()){
@@ -989,8 +989,15 @@ class VendorController extends Controller
         $validator = Validator::make($inputs, $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
+
+        $offer_image = '';
+        if($request->hasFile('offer_image')) {
+            $offer_image = str_random('10').'_'.time().'.'.request()->offer_image->getClientOriginalExtension();
+            request()->offer_image->move(public_path('uploads/offer_image/'), $offer_image);
+        }
+
         $offerArr = array(
             'user_id'           =>  $request->user_id,
             'offer_name_en'     =>  $request->offer_name_en,
@@ -1000,9 +1007,11 @@ class VendorController extends Controller
             'price'             =>  $request->price,
             'description_en'    =>  $request->description_en,
             'description_ar'    =>  $request->description_ar,
+            'offer_image'       =>  $offer_image,
             'created_at'        =>  date('Y-m-d H:i:s'),
             'updated_at'        =>  date('Y-m-d H:i:s'),
         );
+
         $getOfferId = \DB::table('offers')->insertGetId($offerArr);
         if($getOfferId) {
             return (['status' => true, 'message' => __('Offer added successfully'), 'returnId' => $getOfferId]);
@@ -1023,7 +1032,7 @@ class VendorController extends Controller
         $validator = Validator::make($request->all(), $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $getList = \DB::table('offers')->select('offers.*','vendor_services.service_name','vendor_services.service_name_ar')->where('user_id',$request->user_id)
                     ->leftJoin('vendor_services', function($join) {
@@ -1031,6 +1040,9 @@ class VendorController extends Controller
                     })->get();
 
         if(count($getList) > 0)  {
+            foreach($getList as $gl){
+                $gl->offer_image = asset('public/uploads/offer_image/'.$gl->offer_image);
+            }
             return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
         }else{
             return (['status' => false, 'message' => __('No Record Found'), 'data' => [] ]);
@@ -1051,10 +1063,10 @@ class VendorController extends Controller
         $validator = Validator::make($request->all(), $rules , $message);
         if ($validator->fails()) {
             $errors =  $validator->errors()->all();
-            return response(['status' => false , 'message' => $errors[0]] , 200);              
+            return response(['status' => false , 'message' => $errors[0]] , 200);
         }
         $selectOffer = \DB::table('offers')->where('id',$request->offer_id)
-                        ->where('user_id',$request->user_id)                        
+                        ->where('user_id',$request->user_id)
                         ->delete();
         if($selectOffer) {
             return (['status' => true, 'message' => __('Offer deleted successfully')]);
