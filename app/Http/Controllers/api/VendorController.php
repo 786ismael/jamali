@@ -1041,7 +1041,11 @@ class VendorController extends Controller
 
         if(count($getList) > 0)  {
             foreach($getList as $gl){
-                $gl->offer_image = asset('public/uploads/offer_image/'.$gl->offer_image);
+                if(!empty($gl->offer_image))
+                    $gl->offer_image = asset('public/uploads/offer_image/'.$gl->offer_image);
+                else
+                $gl->offer_image = asset('public/uploads/others/placeholder.png');
+
             }
             return (['status' => true, 'message' => __('Record Found'), 'data' => $getList]);
         }else{
