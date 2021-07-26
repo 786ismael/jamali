@@ -415,6 +415,7 @@ class UserController extends Controller{
                     $VendorServices[$key]->service_name = (!empty($value->service_name_ar) && !is_null($value->service_name_ar) ) ? $value->service_name_ar  :  $value->service_name;
                     $VendorServices[$key]->category_name = (!empty($value->category_name_ar) && !is_null($value->category_name_ar) ) ? $value->category_name_ar  :  $value->category_name;
                     $VendorServices[$key]->service_image = $this->getServiceImage($value->service_image);
+                    $VendorServices[$key]->offer_amount = (int)$value->offer_amount;
                 }
             }
 
