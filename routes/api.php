@@ -53,6 +53,7 @@ Route::group(['middleware' => ['localization']], function () {
 	Route::get('/user/order_history', 'api\UserController@orderHistory');
 	Route::get('/pay/remainng/amount', 'api\UserController@payRemainingAmount');
 	Route::get('/user/get_all_offers', 'api\UserController@getAllVendorOfferList');
+
 	//============VendorController==========================
 
 	Route::get('/vendor/get_days', 'api\VendorController@getDays');
@@ -95,6 +96,7 @@ Route::group(['middleware' => ['localization']], function () {
 
 
 	Route::post('/vendor/add_offers','api\VendorController@vendorOfferAdd');
+    Route::post('/vendor/update_offers', 'api\VendorController@updateOffers');
 	Route::get('/vendor/get_offers','api\VendorController@getVendorOfferList');
 	Route::get('/vendor/delete_offer','api\VendorController@deleteVendorOfferList');
 

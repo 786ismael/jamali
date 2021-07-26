@@ -1020,6 +1020,63 @@ class VendorController extends Controller
         }
     }
 
+    public function updateOffers(Request $request){
+        $langData   = trans('api_vendor');
+        $inputs = $request->all();
+        $rules = [
+            'id'                        =>  'required',
+            //'user_id'                   =>  'required',
+            'offer_name_en'             =>  'required',
+            'offer_name_ar'             =>  'required',
+            'service_id'                =>  'required',
+            'offer_type'                =>  'required',
+            'price'                     =>  'required',
+            'description_en'            =>  'required',
+            'description_ar'            =>  'required',
+        ];
+        $message = [
+            //'user_id.required'          => $langData['user_id'],
+            'offer_name_en.required'    => $langData['offer_name_en'],
+            'service_id.required'       => $langData['service_id'],
+            'offer_type.required'       => $langData['offer_type'],
+            'price.required'            => $langData['price'],
+            'description_en.required'   => $langData['description_en'],
+        ];
+        $validator = Validator::make($inputs, $rules , $message);
+        if ($validator->fails()) {
+            $errors =  $validator->errors()->all();
+            return response(['status' => false , 'message' => $errors[0]] , 200);
+        }
+
+        $offer_image = '';
+        if($request->hasFile('offer_image')) {
+            $offer_image = str_random('10').'_'.time().'.'.request()->offer_image->getClientOriginalExtension();
+            request()->offer_image->move(public_path('uploads/offer_image/'), $offer_image);
+        }
+
+        $offerArr = array(
+            //'user_id'           =>  $request->user_id,
+            'offer_name_en'     =>  $request->offer_name_en,
+            'offer_name_ar'     =>  $request->offer_name_ar,
+            'service_id'        =>  $request->service_id,
+            'offer_type'        =>  $request->offer_type,
+            'price'             =>  $request->price,
+            'description_en'    =>  $request->description_en,
+            'description_ar'    =>  $request->description_ar,
+            'offer_image'       =>  $offer_image,
+            'updated_at'        =>  date('Y-m-d H:i:s'),
+        );
+
+        $getOfferId = \DB::table('offers')->where('id',$request->id)->update($offerArr);
+        if($getOfferId) {
+            return (['status' => true, 'message' => __('Offer updated successfully')]);
+        }else{
+            return (['status' => false, 'message' => __('Failed to update Offer')]);
+        }
+        print_r($request->all());
+        die;
+    }
+
     public function getVendorOfferList (Request $request)
     {
         $langData   = trans('api_vendor');
