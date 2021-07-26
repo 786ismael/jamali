@@ -1048,24 +1048,34 @@ class VendorController extends Controller
             return response(['status' => false , 'message' => $errors[0]] , 200);
         }
 
-        $offer_image = '';
         if($request->hasFile('offer_image')) {
             $offer_image = str_random('10').'_'.time().'.'.request()->offer_image->getClientOriginalExtension();
             request()->offer_image->move(public_path('uploads/offer_image/'), $offer_image);
+            $offerArr = array(
+                //'user_id'           =>  $request->user_id,
+                'offer_name_en'     =>  $request->offer_name_en,
+                'offer_name_ar'     =>  $request->offer_name_ar,
+                'service_id'        =>  $request->service_id,
+                'offer_type'        =>  $request->offer_type,
+                'price'             =>  $request->price,
+                'description_en'    =>  $request->description_en,
+                'description_ar'    =>  $request->description_ar,
+                'offer_image'       =>  $offer_image,
+                'updated_at'        =>  date('Y-m-d H:i:s'),
+            );
+        }else{
+            $offerArr = array(
+                //'user_id'           =>  $request->user_id,
+                'offer_name_en'     =>  $request->offer_name_en,
+                'offer_name_ar'     =>  $request->offer_name_ar,
+                'service_id'        =>  $request->service_id,
+                'offer_type'        =>  $request->offer_type,
+                'price'             =>  $request->price,
+                'description_en'    =>  $request->description_en,
+                'description_ar'    =>  $request->description_ar,
+                'updated_at'        =>  date('Y-m-d H:i:s'),
+            );
         }
-
-        $offerArr = array(
-            //'user_id'           =>  $request->user_id,
-            'offer_name_en'     =>  $request->offer_name_en,
-            'offer_name_ar'     =>  $request->offer_name_ar,
-            'service_id'        =>  $request->service_id,
-            'offer_type'        =>  $request->offer_type,
-            'price'             =>  $request->price,
-            'description_en'    =>  $request->description_en,
-            'description_ar'    =>  $request->description_ar,
-            'offer_image'       =>  $offer_image,
-            'updated_at'        =>  date('Y-m-d H:i:s'),
-        );
 
         $getOfferId = \DB::table('offers')->where('id',$request->id)->update($offerArr);
         if($getOfferId) {
