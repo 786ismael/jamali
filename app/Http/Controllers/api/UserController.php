@@ -402,7 +402,7 @@ class UserController extends Controller{
             $VendorPortfolios = [];
             $vendorRatings= [];
             $VendorServices = DB::table('vendor_services as vs')
-                            ->select('vs.*','c.category_name','c.category_name_ar','o.price as offer_amount')
+                            ->select('vs.*','c.category_name','c.category_name_ar','o.price as offer_amount','o.offer_type')
                             ->leftJoin('categories as c','c.category_id','=','vs.category_id')
                             ->leftJoin('offers as o','o.service_id','=','vs.vendor_service_id')
                             ->whereNull('vs.deleted_at')
