@@ -1083,7 +1083,7 @@ class AuthController extends Controller{
         }
     }
 
-    public function sendSupportRequest(Request $request){
+    public function sendSupportRequest(Request $request){        
         $langData   = trans('api_auth');
         $inputs = $request->all();
         $rules = [
@@ -1122,6 +1122,7 @@ class AuthController extends Controller{
                     'template'      => 'support_email',
                     'subject'       => 'Jamali',                    
                 ));
+
                 Mail::to(env('MAIL_USERNAME'))->send(new NotifyMail($mailData));
                 return response(['status' => true , 'message' => __('Successfully sent request') ]);
             }else{
