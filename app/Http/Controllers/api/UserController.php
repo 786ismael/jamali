@@ -393,7 +393,8 @@ class UserController extends Controller{
     public function getVendorDetails(Request $request){
         $langData   = trans('api_user');
         $inputs     = $request->all();
-        if($inputs['lang'] == 'ar'){
+
+	if($inputs['lang'] == 'ar'){
             $Vendor = DB::table('users as v')
                             ->select('v.id as vendor_id', 'v.user_name as vendor_user_name', 'v.phone_number as vendor_number' , 'v.profile_image as vendor_profile_image', 'v.address as vendor_address', 'v.lat as vendor_lat', 'v.lng as vendor_lng' , 'v.description_ar as vendor_description')
                             ->where('v.id',$inputs['vendor_id'])
@@ -404,6 +405,7 @@ class UserController extends Controller{
                             ->where('v.id',$inputs['vendor_id'])
                             ->first();
         }
+
         if($Vendor){
             $VendorServices=[];
             $VendorPortfolios = [];
