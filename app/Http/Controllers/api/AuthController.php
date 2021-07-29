@@ -1111,8 +1111,18 @@ class AuthController extends Controller{
             $Support->user_name    = $UserStaust->user_name;
             $Support->phone_number = $UserStaust->phone_number;
             $Support->email        = $UserStaust->email;
-            $Support->message      = $inputs['message'];
+            $Support->message      = $inputs['message'];            
+
             if($Support->save()){
+                $support_type = ApiHelper::supportType($inputs['support_type']);
+                $inputs['support_type'] = $support_type[0]->support_name??'';
+               $mailData = array_merge($inputs,array(
+                    'from_name'     => env('MAIL_USERNAME'),
+                    'schedule_name' => 'Jamali',
+                    'template'      => 'support_email',
+                    'subject'       => 'Jamali',                    
+                ));
+                Mail::to(env('MAIL_USERNAME'))->send(new NotifyMail($mailData));
                 return response(['status' => true , 'message' => __('Successfully sent request') ]);
             }else{
                 return response(['status' => false , 'message' => __('Failed to send request') ]);

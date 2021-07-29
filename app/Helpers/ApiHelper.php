@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use url;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\SupportType;
 
 class ApiHelper {
     public static function otpGenrator($number){ 
@@ -347,4 +348,15 @@ class ApiHelper {
         $country = City::where('country_id',$country_id)->get();
         return $country;
     }
+
+    public static function supportType($id = 0)
+    {
+        if($id){
+            $support_type = SupportType::all();
+        }else{
+            $support_type = SupportType::where('id',$id)->first();
+        }        
+        return $support_type;
+    }
+    
 }
