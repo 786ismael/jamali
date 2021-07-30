@@ -479,6 +479,10 @@ class UserController extends Controller{
             if(!empty($vendor_offer->toArray())){
                 foreach($vendor_offer as $key=>$vo){
                     $vendor_offer[$key]->service_image = $this->getServiceImage($vo->service_image);
+                    if(!empty($vo->offer_image))
+                        $vo->offer_image = asset('public/uploads/offer_image/'.$vo->offer_image);
+                    else
+                        $vo->offer_image = asset('public/uploads/others/placeholder.png');
                 }
             }
             $Vendor->offers = $vendor_offer;
