@@ -471,7 +471,8 @@ class UserController extends Controller{
                 }
             }
             $Vendor->products = $vendorProducts ?? array();
-            $vendor_offer = DB::table('offers as o')                            
+            $vendor_offer = DB::table('offers as o')                  
+                            ->leftJoin('vendor_services as vs','o.service_id','=','vs.vendor_service_id')
                             ->where('o.user_id',$request->vendor_id)
                             ->orderBy('o.id','desc')
                             ->get();
