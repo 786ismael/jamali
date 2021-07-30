@@ -1123,7 +1123,7 @@ class AuthController extends Controller{
                     'subject'       => 'Jamali',                    
                 ));
 
-                Mail::to(env('MAIL_USERNAME'))->send(new NotifyMail($mailData));
+                Mail::to(env('ADMIN_EMAIL'))->send(new NotifyMail($mailData));
                 return response(['status' => true , 'message' => __('Successfully sent request') ]);
             }else{
                 return response(['status' => false , 'message' => __('Failed to send request') ]);
