@@ -471,6 +471,12 @@ class UserController extends Controller{
                 }
             }
             $Vendor->products = $vendorProducts ?? array();
+            $vendor_offer = DB::table('offers as o')                            
+                            ->where('o.user_id',$request->vendor_id)
+                            ->orderBy('o.id','desc')
+                            ->get();
+            $Vendor->offers = $vendor_offer;
+
             if($vendorRatingCount){
                 $rating_sum = $vendorRatingCount->rating_sum;
                 if($rating_sum==0){
