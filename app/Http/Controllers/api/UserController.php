@@ -476,6 +476,11 @@ class UserController extends Controller{
                             ->where('o.user_id',$request->vendor_id)
                             ->orderBy('o.id','desc')
                             ->get();
+            if(!empty($vendor_offer->toArray())){
+                foreach($vendor_offer as $key=>$vo){
+                    $vendor_offer[$key]->service_image = $this->getServiceImage($vo->service_image);
+                }
+            }
             $Vendor->offers = $vendor_offer;
 
             if($vendorRatingCount){
