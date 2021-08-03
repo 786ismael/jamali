@@ -86,7 +86,7 @@ class AuthController extends Controller{
         $User->user_name          = $inputs['user_name'];
         $User->email              = $inputs['email'] ?? NULL;
         $User->phone_number       = $inputs['phone_number'];
-        $User->password           = Hash::make($inputs['password']);        
+        $User->password           = Hash::make($inputs['password']);
         //$User->device_type        = $inputs['device_type'];
         //$User->device_token       = $inputs['device_token'];
         if(!empty($inputs['vendor_type'])){
@@ -127,13 +127,12 @@ class AuthController extends Controller{
         if(!empty($inputs['gender'])){
             $User->gender       = $inputs['gender'];
         }
-
-        if(!empty($inputs['country_id'])){
-            $User->country_id    = $inputs['country_id'] ?? '';
-        }
-        if(!empty($inputs['city_id'])){
-            $User->city_id    = $inputs['city_id'] ?? '';
-        }
+	if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
+            }
         
         $User->save();
         if($User){
@@ -504,16 +503,18 @@ class AuthController extends Controller{
               $user->otp                = $otp;
               $user->otp_verify_status  = '0';
               $user->update();
+
+              //https://apps.gateway.sa/vendorsms/pushsms.aspx?user=almotelq&password=Asim6363981&msisdn=00966533755044&sid=THEPLANET&msg=This message send from Jamali app&fl=0
               $message = __('Your jamali forgot otp is ') . $otp;
               $this->sendMessage($inputs['phone_number'],$message);
-//              return response(['status' => true , 'message' => __('Otp sent'),'data'=>$user]);
+              return response(['status' => true , 'message' => __('Otp sent'),'data'=>$user]);
           }else{
                return response(['status' => false , 'message' => __('Failed to send otp')]);
           }   
     }
 
     public function sendMessage($mobileNumber,$message){
-          $url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
+$url    = "https://apps.gateway.sa/vendorsms/pushsms.aspx";
             $dataArray = [
                "user" => "almotelq",
                "password" => "q1w2e3r4",
@@ -538,21 +539,23 @@ class AuthController extends Controller{
             $response = curl_exec($curl);
             $err = curl_error($curl);
             curl_close($curl);
-        if ($err) {
+            if ($err) {
               // echo "cURL Error #:" . $err;
-//                error_log("cURL Error #:" . print_r($err,TRUE));
-                Log::info($err);
-
+                error_log("cURL Error #:" . print_r($err,TRUE));
             } else {
               //echo $response;
-            Log::info($response);
-  //            error_log("cURL Error #:" . print_r($response,TRUE));
+              error_log("cURL success #:" . print_r($response,TRUE));
             }
-            // if ($err) {
-            //   echo "cURL Error #:" . $err;
-            // } else {
-            //   echo $response;
-            // }
+        /*try{
+		$url = "https://apps.gateway.sa/vendorsms/pushsms.aspx?user=almotelq&password=Asim6363981&msisdn=$mobileNumber&sid=THEPLANET&msg=$message&fl=0";
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_URL,$url);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		curl_exec($ch);
+		curl_close($ch);
+        }catch(\Exception $e){
+          
+        }*/
     }
 
     public function forgotPasswordBackUp(Request $request){
@@ -751,7 +754,7 @@ class AuthController extends Controller{
             'id'                => 'required',
             'role'              => 'required',
             'user_name'         => 'required',
-         //   'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
+//            'email'             => [Rule::unique('users', 'email')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
             'phone_number'      => ['required', Rule::unique('users', 'phone_number')->where('role', $inputs['role'])->ignore($inputs['id'], 'id')],
         ];
 
@@ -759,7 +762,7 @@ class AuthController extends Controller{
             'id.required'               => __('Id field is required'),
             'role.required'             => __('Role field is required'),
             'user_name.required'        => __('User name field is required'),
-        //    'email.required'            => __('Email field is required'),
+           // 'email.required'            => __('Email field is required'),
             'phone_number.required'     => __('Phone field is required')
         ];
 
@@ -777,11 +780,10 @@ class AuthController extends Controller{
                 request()->profile_image->move(public_path('uploads/profiles/'), $profile_image);
             }
 
-
             $User                     = User::find($userStatus->id);
             $User->user_name          = $inputs['user_name'];
-            $User->email              = !empty($inputs['email'])?$inputs['email'] : NULL;
-            $User->phone_number       = $inputs['phone_number'];
+            $User->email              = $inputs['email']?? NULL;
+            //$User->phone_number       = $inputs['phone_number'];
             if(!empty($inputs['phone_number'])){
                 $User->phone_number       = $inputs['phone_number'];
             }
@@ -797,13 +799,19 @@ class AuthController extends Controller{
             if(!empty($inputs['lng'])){
                 $User->lng       = $inputs['lng'];
             }
-            if(!empty($inputs['description_english'])){
+	    if(!empty($inputs['description_english'])){
                 $User->description       = $inputs['description_english'] ?? '';
             }
             if(!empty($inputs['description_arabic'])){
                 $User->description_ar    = $inputs['description_arabic'] ?? '';
             }
             if(!empty($inputs['country_id'])){
+                $User->country_id    = $inputs['country_id'] ?? '';
+            }
+            if(!empty($inputs['city_id'])){
+                $User->city_id    = $inputs['city_id'] ?? '';
+            }
+	    if(!empty($inputs['country_id'])){
                 $User->country_id    = $inputs['country_id'] ?? '';
             }
             if(!empty($inputs['city_id'])){
@@ -1083,7 +1091,7 @@ class AuthController extends Controller{
         }
     }
 
-    public function sendSupportRequest(Request $request){        
+    public function sendSupportRequest(Request $request){
         $langData   = trans('api_auth');
         $inputs = $request->all();
         $rules = [
@@ -1111,19 +1119,8 @@ class AuthController extends Controller{
             $Support->user_name    = $UserStaust->user_name;
             $Support->phone_number = $UserStaust->phone_number;
             $Support->email        = $UserStaust->email;
-            $Support->message      = $inputs['message'];            
-
+            $Support->message      = $inputs['message'];
             if($Support->save()){
-                $support_type = ApiHelper::supportType($inputs['support_type']);
-                $inputs['support_type'] = $support_type[0]->support_name??'';
-               $mailData = array_merge($inputs,array(
-                    'from_name'     => env('MAIL_USERNAME'),
-                    'schedule_name' => 'Jamali',
-                    'template'      => 'support_email',
-                    'subject'       => 'Jamali',                    
-                ));
-
-                Mail::to(env('ADMIN_EMAIL'))->send(new NotifyMail($mailData));
                 return response(['status' => true , 'message' => __('Successfully sent request') ]);
             }else{
                 return response(['status' => false , 'message' => __('Failed to send request') ]);
@@ -1131,53 +1128,6 @@ class AuthController extends Controller{
             
         }else{
             return response(['status' => false , 'message' => __('This user id does not exist') ]);  
-        }
-    }
-   
-    public function termCondition(Request $request){
-            $lang = $request->lang;
-            if($lang == 'ar'){
-                return view('api.term_condition_arabic');
-            }else{
-                return view('api.term_condition_english');
-            }
-    }
-
-    public function privacyPolicy(Request $request){
-            $lang = $request->lang;
-            if($lang == 'ar'){
-                    return view('api.privacy_policy_arabic');
-            }else{
-                    return view('api.privacy_policy_english');
-            }
-    }
-
-    public function countryList(Request $request){
-        $country = ApiHelper::country();
-        if(!empty($country->toArray())){
-            return response(['status' => true , 'message' => __('Record found'), 'data'=>$country ]);
-        }else{
-            return response(['status' => false , 'message' => __('Rrecord not found') ]);
-        }
-    }
-
-    public function cityList(Request $request)
-    {
-        $langData   = trans('api_auth');
-        $inputs = $request->all();
-        $rules = [
-            'country_id' => 'required'
-        ];
-         $message = [
-            'country_id.required'           => __('Country id field is required')
-        ];
-
-        $validator = Validator::make($inputs, $rules , $message);
-        $cities = ApiHelper::city($request->country_id);
-        if(!empty($cities->toArray())){
-            return response(['status' => true , 'message' => __('Record found'), 'data'=>$cities ]);
-        }else{
-            return response(['status' => false , 'message' => __('Rrecord not found') ]);
         }
     }
 }
