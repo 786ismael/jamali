@@ -1207,7 +1207,10 @@ class UserController extends Controller{
             $data = array();
             foreach($favouriteVendors as $key => $value){
 
-                $profileImage = ImageHelper::getProfileImage($value->vendor->profile_image);
+                if(!empty($value->vendor) && !empty($value->vendor->profile_image))
+                    $profileImage = ImageHelper::getProfileImage($value->vendor->profile_image);
+                else
+                    $profileImage = "";
 
                 $rating = DB::table('vendor_ratings')->where('vendor_id',$value->vendor_id)->avg('rating');
 
